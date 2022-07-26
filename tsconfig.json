@@ -17,9 +17,14 @@
     "baseUrl": ".",
     "paths": {
       "@/components/*": ["ui/components/*"],
-      "@/layout/*": ["ui/layout/*"]
+      "@/layout": ["ui/layout"],
+      "@/database/*": ["database/*"],
+      "@/utils/*": ["utils/*"],
+      "@/types/*": ["types/*"],
+      "@/features/*": ["features/*"],
+      "@/themes": ["themes"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["**/node_modules", "**/.*/"]
+  "exclude": ["**/node_modules"]
 }

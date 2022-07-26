@@ -1,26 +1,32 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme } from '@mui/material/styles';
 
 export const darkTheme = createTheme({
   palette: {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#333333",
+      main: '#222222',
     },
     secondary: {
-      main: "#391da8",
+      main: '#391da8',
+    },
+    info: {
+      main: '#eeeeee',
+    },
+    error: {
+      main: '#db1607',
     },
   },
   components: {
     MuiLink: {
       defaultProps: {
-        underline: "none",
-        color: "white",
+        underline: 'none',
+        color: 'white',
       },
     },
     MuiAppBar: {
       defaultProps: {
         elevation: 0,
-        position: "fixed",
+        position: 'fixed',
       },
       styleOverrides: {
         root: {
@@ -48,18 +54,16 @@ export const darkTheme = createTheme({
 
     MuiButton: {
       defaultProps: {
-        variant: "contained",
-        size: "small",
+        variant: 'contained',
+        size: 'small',
       },
       styleOverrides: {
         root: {
-          backgroundColor: "#121212",
-          textTransform: "none",
-          boxShadow: "none",
+          textTransform: 'none',
+          boxShadow: 'none',
           borderRadius: 10,
-          ":hover": {
-            backgroundColor: "#333",
-            transition: "all 0.3s ease-in-out",
+          ':hover': {
+            transition: 'all 0.3s ease-in-out',
           },
         },
       },
@@ -71,9 +75,13 @@ export const darkTheme = createTheme({
       },
       styleOverrides: {
         root: {
-          boxShadow: "0px 5px 5px rgba(0,0,0,0.05)",
-          borderRadius: "10px",
+          borderRadius: '10px',
         },
+      },
+    },
+    MuiDrawer: {
+      defaultProps: {
+        elevation: 0,
       },
     },
   },

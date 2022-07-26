@@ -1,4 +1,4 @@
-import ShopLayout from '@/layout/ShopLayout';
+import { ShopLayout } from '@/layout';
 import { Box, Typography } from '@mui/material';
 
 const Error404Page = () => {
