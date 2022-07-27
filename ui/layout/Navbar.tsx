@@ -1,4 +1,4 @@
-import NextLink from "next/link";
+import NextLink from 'next/link';
 import {
   AppBar,
   Badge,
@@ -8,36 +8,36 @@ import {
   Link,
   Toolbar,
   Typography,
-} from "@mui/material";
-import { SearchOutlined, ShoppingCartOutlined } from "@mui/icons-material";
+} from '@mui/material';
+import { SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material';
 
 const Navbar = () => {
   return (
     <AppBar>
       <Toolbar>
-        <NextLink href='/' passHref>
-          <Link display='flex' alignItems='center'>
-            <Typography variant='h6'>Nocti |</Typography>
+        <NextLink href="/" passHref>
+          <Link display="flex" alignItems="center">
+            <Typography variant="h6">Nocti |</Typography>
             <Typography sx={{ ml: 0.5 }}>Shop</Typography>
           </Link>
         </NextLink>
 
         <Box flex={1} />
 
-        <Box sx={{ display: { xs: "none", sm: "block" } }}>
-          <NextLink href='/category/men' passHref>
+        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+          <NextLink href="/category/men" passHref>
             <Link>
-              <Button>Hombres</Button>
+              <Button color="info">Hombres</Button>
             </Link>
           </NextLink>
-          <NextLink href='/category/women' passHref>
+          <NextLink href="/category/women" passHref>
             <Link>
-              <Button>Mujeres</Button>
+              <Button color="info">Mujeres</Button>
             </Link>
           </NextLink>
-          <NextLink href='/category/kid' passHref>
+          <NextLink href="/category/kid" passHref>
             <Link>
-              <Button>Niños</Button>
+              <Button color="info">Niños</Button>
             </Link>
           </NextLink>
         </Box>
@@ -47,17 +47,17 @@ const Navbar = () => {
         <IconButton>
           <SearchOutlined />
         </IconButton>
-        <NextLink href='/cart' passHref>
+        <NextLink href="/cart" passHref>
           <Link>
             <IconButton>
-              <Badge badgeContent={2} color='secondary'>
+              <Badge badgeContent={2} color="secondary">
                 <ShoppingCartOutlined />
               </Badge>
             </IconButton>
           </Link>
         </NextLink>
 
-        <Button>Menú</Button>
+        <Button color="info">Menú</Button>
       </Toolbar>
     </AppBar>
   );

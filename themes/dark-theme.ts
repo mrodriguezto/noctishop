@@ -4,13 +4,13 @@ export const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#222222',
+      main: '#5138e0',
     },
     secondary: {
-      main: '#391da8',
+      main: '#ebebeb',
     },
     info: {
-      main: '#eeeeee',
+      main: '#222222',
     },
     error: {
       main: '#db1607',
@@ -20,7 +20,7 @@ export const darkTheme = createTheme({
     MuiLink: {
       defaultProps: {
         underline: 'none',
-        color: 'white',
+        color: 'secondary',
       },
     },
     MuiAppBar: {

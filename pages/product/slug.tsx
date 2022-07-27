@@ -1,8 +1,9 @@
-import { initialData } from '@/database/products';
-import { ProductSlideshow } from '@/features/products';
-import { ShopLayout } from '@/layout';
-import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import type { NextPage } from 'next';
+import { Box, Button, Chip, Grid, Typography } from '@mui/material';
+
+import { initialData } from '@/database/products';
+import { ItemCounter, ProductSlideshow, SizeSelector } from '@/features/products';
+import { ShopLayout } from '@/layout';
 
 const product = initialData.products[0];
 
@@ -23,11 +24,12 @@ const ProductPage: NextPage = () => {
             {/* Quantity */}
             <Box sx={{ my: 2 }}>
               <Typography variant="subtitle2">Cantidad</Typography>
-              {/* TODO: Item counter */}
+              <ItemCounter />
+              <SizeSelector sizes={product.sizes} />
             </Box>
 
             {/* Add to cart */}
-            <Button color="secondary" className="circular-btn">
+            <Button color="primary" className="circular-btn">
               Agregar al carrito
             </Button>
             {/* <Chip label="No hay disponibles" color="error" variant="outlined" /> */}
