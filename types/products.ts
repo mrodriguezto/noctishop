@@ -10,6 +10,8 @@ export type IProduct = {
   title: string;
   type: IProductType;
   gender: IGender;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type IProductSize = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';

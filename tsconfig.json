@@ -18,7 +18,8 @@
     "paths": {
       "@/components/*": ["ui/components/*"],
       "@/layout": ["ui/layout"],
-      "@/database/*": ["database/*"],
+      "@/database": ["database"],
+      "@/models": ["models"],
       "@/utils/*": ["utils/*"],
       "@/types/*": ["types/*"],
       "@/features/*": ["features/*"],
