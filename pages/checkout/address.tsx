@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { ShopLayout } from 'ui/layout';
+import { ShopLayout } from 'ui';
 
 const AddressPage: NextPage = () => {
   return (

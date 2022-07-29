@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 
-import { seedData } from '@/database';
-import { ItemCounter, ProductSlideshow, SizeSelector } from '@/features/products';
-import { ShopLayout } from '@/layout';
+import { seedData } from 'database';
+import { ItemCounter, ProductSlideshow, SizeSelector } from 'features/products';
+import { ShopLayout } from 'ui';
 
 const product = seedData.initialData.products[0];
 

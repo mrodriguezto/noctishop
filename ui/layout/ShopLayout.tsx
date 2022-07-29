@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Navbar, SideMenu } from './';
+import { Navbar, SideMenu } from '../';
 
 type Props = {
   pageTitle: string;

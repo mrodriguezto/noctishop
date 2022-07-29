@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import {
   AppBar,
@@ -10,8 +12,23 @@ import {
   Typography,
 } from '@mui/material';
 import { SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material';
+import { UIContext } from 'ui';
+
+const categories = [
+  { title: 'Hombres', path: 'men' },
+  { title: 'Mujeres', path: 'women' },
+  { title: 'Niños', path: 'kid' },
+];
 
 const Navbar = () => {
+  const { route } = useRouter();
+
+  const { toggleSideMenu } = useContext(UIContext);
+
+  const getColorByRoute = (path: string) => {
+    return route === `/category/${path}` ? 'secondary' : 'info';
+  };
+
   return (
     <AppBar>
       <Toolbar>
@@ -25,21 +42,13 @@ const Navbar = () => {
         <Box flex={1} />
 
         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-          <NextLink href="/category/men" passHref>
-            <Link>
-              <Button color="info">Hombres</Button>
-            </Link>
-          </NextLink>
-          <NextLink href="/category/women" passHref>
-            <Link>
-              <Button color="info">Mujeres</Button>
-            </Link>
-          </NextLink>
-          <NextLink href="/category/kid" passHref>
-            <Link>
-              <Button color="info">Niños</Button>
-            </Link>
-          </NextLink>
+          {categories.map(category => (
+            <NextLink key={category.path} href="/category/kid" passHref>
+              <Link>
+                <Button color={getColorByRoute('kid')}>Niños</Button>
+              </Link>
+            </NextLink>
+          ))}
         </Box>
 
         <Box flex={1} />
@@ -57,7 +66,9 @@ const Navbar = () => {
           </Link>
         </NextLink>
 
-        <Button color="info">Menú</Button>
+        <Button onClick={toggleSideMenu} color="info">
+          Menú
+        </Button>
       </Toolbar>
     </AppBar>
   );

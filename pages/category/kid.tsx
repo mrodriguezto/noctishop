@@ -4,20 +4,20 @@ import { Typography } from '@mui/material';
 import { ProductList, useProducts } from 'features/products';
 import { FullScreenLoading, ShopLayout } from 'ui';
 
-const HomePage: NextPage = () => {
-  const { products, isLoading } = useProducts('/products');
+const KidsCategoryPage: NextPage = () => {
+  const { products, isLoading } = useProducts('/products?gender=kid');
 
   return (
     <ShopLayout
-      pageTitle={'Nocti-Shop'}
-      pageDescription={'Encuentra los mejores productos'}
+      pageTitle="Categoría: Niños | Nocti-Shop"
+      pageDescription="Los mejores productos para niños"
     >
       <Typography variant="h1" component="h1">
-        Tienda
+        Niños
       </Typography>
 
       <Typography variant="h2" sx={{ mb: 1 }}>
-        Todos los productos
+        Productos para niños
       </Typography>
 
       {isLoading ? <FullScreenLoading /> : <ProductList products={products} />}
@@ -25,4 +25,4 @@ const HomePage: NextPage = () => {
   );
 };
 
-export default HomePage;
+export default KidsCategoryPage;

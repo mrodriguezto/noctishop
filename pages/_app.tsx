@@ -2,7 +2,8 @@ import type { AppProps } from 'next/app';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { SWRConfig } from 'swr';
 import { darkTheme } from 'themes';
-import '../styles/globals.css';
+import { UIProvider } from 'ui';
+import 'styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -11,10 +12,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         fetcher: (resource, init) => fetch(resource, init).then(res => res.json()),
       }}
     >
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <UIProvider>
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </UIProvider>
     </SWRConfig>
   );
 }

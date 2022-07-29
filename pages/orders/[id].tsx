@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { CreditCardOffOutlined, CreditScoreOutlined } from '@mui/icons-material';
 
-import { ShopLayout } from 'ui/layout';
+import { ShopLayout } from 'ui';
 import { CartList, OrderSummary } from 'features/cart';
 
 const OrderPage: NextPage = () => {

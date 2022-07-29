@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import NextLink from 'next/link';
 import { Chip, Grid, Link, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { ShopLayout } from 'ui/layout';
+import { ShopLayout } from 'ui';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },

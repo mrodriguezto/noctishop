@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { useRouter } from 'next/router';
 import {
   Box,
   Divider,
@@ -14,13 +16,23 @@ import {
 import { SearchOutlined } from '@mui/icons-material';
 
 import { sideMenuItems, sideMenuAdminItems } from 'utils/constants';
+import { UIContext } from 'ui';
 
 const SideMenu = () => {
+  const { isMenuOpen, toggleSideMenu } = useContext(UIContext);
+  const router = useRouter();
+
+  const navigateTo = (path: string) => {
+    router.push(path);
+    toggleSideMenu();
+  };
+
   return (
     <Drawer
-      open={false}
+      open={isMenuOpen}
       anchor="right"
       sx={{ backdropFilter: 'blur(3px)', transition: 'all 0.5s ease-out' }}
+      onClose={toggleSideMenu}
     >
       <Box sx={{ width: 250, paddingTop: 5 }}>
         <List>
@@ -45,6 +57,7 @@ const SideMenu = () => {
               sx={() =>
                 item.isResponsive ? { display: { xs: '', sm: 'none' } } : {}
               }
+              onClick={() => navigateTo(item.path)}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.title} />
@@ -56,7 +69,7 @@ const SideMenu = () => {
           <ListSubheader>Admin Panel</ListSubheader>
 
           {sideMenuAdminItems.map(item => (
-            <ListItem key={item.title} button>
+            <ListItem key={item.title} button onClick={() => navigateTo(item.path)}>
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.title} />
             </ListItem>
