@@ -1,5 +1,5 @@
-import { IProductSize } from '@/types/products';
 import { Box, Button } from '@mui/material';
+import { IProductSize } from 'types/products';
 
 type Props = {
   selectedSize?: IProductSize;

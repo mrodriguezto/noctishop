@@ -1,11 +1,13 @@
 import type { NextPage } from 'next';
 import { Typography } from '@mui/material';
 
-import { initialData } from '@/database/products';
-import { ProductList } from '@/features/products';
-import { ShopLayout } from '@/layout';
+import { ProductList, useProducts } from 'features/products';
+import { ShopLayout } from 'ui/layout';
+import { FullScreenLoading } from 'ui/components';
 
-const Home: NextPage = () => {
+const HomePage: NextPage = () => {
+  const { products, isLoading } = useProducts('/products');
+
   return (
     <ShopLayout
       pageTitle={'Nocti-Shop'}
@@ -19,9 +21,9 @@ const Home: NextPage = () => {
         Todos los productos
       </Typography>
 
-      <ProductList products={initialData.products as any} />
+      {isLoading ? <FullScreenLoading /> : <ProductList products={products} />}
     </ShopLayout>
   );
 };
 
-export default Home;
+export default HomePage;

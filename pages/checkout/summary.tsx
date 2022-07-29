@@ -11,8 +11,8 @@ import {
   Typography,
 } from '@mui/material';
 
-import { ShopLayout } from '@/layout';
-import { CartList, OrderSummary } from '@/features/cart';
+import { ShopLayout } from 'ui/layout';
+import { CartList, OrderSummary } from 'features/cart';
 
 const SummaryPage: NextPage = () => {
   return (

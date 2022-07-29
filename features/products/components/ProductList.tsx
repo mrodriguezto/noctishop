@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import { IProduct } from '@/types/products';
+import { IProduct } from 'types/products';
 import { ProductCard } from '..';
 
 type Props = {

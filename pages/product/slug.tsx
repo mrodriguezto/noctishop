@@ -1,11 +1,11 @@
 import type { NextPage } from 'next';
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 
-import { initialData } from '@/database/products';
+import { seedData } from '@/database';
 import { ItemCounter, ProductSlideshow, SizeSelector } from '@/features/products';
 import { ShopLayout } from '@/layout';
 
-const product = initialData.products[0];
+const product = seedData.initialData.products[0];
 
 const ProductPage: NextPage = () => {
   return (

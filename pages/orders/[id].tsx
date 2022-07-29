@@ -10,10 +10,10 @@ import {
   Link,
   Typography,
 } from '@mui/material';
-
-import { ShopLayout } from '@/layout';
-import { CartList, OrderSummary } from '@/features/cart';
 import { CreditCardOffOutlined, CreditScoreOutlined } from '@mui/icons-material';
+
+import { ShopLayout } from 'ui/layout';
+import { CartList, OrderSummary } from 'features/cart';
 
 const OrderPage: NextPage = () => {
   return (

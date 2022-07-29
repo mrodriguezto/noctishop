@@ -1,4 +1,4 @@
-import { ShopLayout } from '@/layout';
+import type { NextPage } from 'next';
 import {
   Box,
   Button,
@@ -10,7 +10,8 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import type { NextPage } from 'next';
+
+import { ShopLayout } from 'ui/layout';
 
 const AddressPage: NextPage = () => {
   return (

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { db, SHOP_CONSTANTS } from '@/database';
-import { Product } from '@/models';
-import { IProduct } from '@/types/products';
+import { db, SHOP_CONSTANTS } from 'database';
+import { Product } from 'models';
+import { IProduct } from 'types/products';
 
 type Data = { message: string } | IProduct[];
 

@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import NextLink from 'next/link';
 import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
-import { AuthLayout } from '@/layout';
+import { AuthLayout } from 'ui/layout';
 
 const LoginPage: NextPage = () => {
   return (

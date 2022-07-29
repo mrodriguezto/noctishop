@@ -31,7 +31,7 @@ export const connect = async () => {
     await mongoose.connect(process.env.MONGO_URL || '');
 
     mongoConnection.isConnected = 1;
-    console.log('Connected to MongoDB:', process.env.MONGO_URL);
+    console.log('Connected to MongoDB');
   } catch (error) {
     console.log("Error: Couldn't establish connection to database");
   }

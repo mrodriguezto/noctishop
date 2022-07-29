@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { SearchOutlined } from '@mui/icons-material';
 
-import { sideMenuItems, sideMenuAdminItems } from '@/utils/constants';
+import { sideMenuItems, sideMenuAdminItems } from 'utils/constants';
 
 const SideMenu = () => {
   return (

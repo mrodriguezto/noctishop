@@ -1,5 +1,5 @@
 import NextLink from 'next/link';
-import { initialData } from '@/database/products';
+import { seedData } from 'database';
 import {
   Box,
   Button,
@@ -9,12 +9,12 @@ import {
   Link,
   Typography,
 } from '@mui/material';
-import { ItemCounter } from '@/features/products';
+import { ItemCounter } from 'features/products';
 
 const productsInCart = [
-  initialData.products[0],
-  initialData.products[1],
-  initialData.products[2],
+  seedData.initialData.products[0],
+  seedData.initialData.products[1],
+  seedData.initialData.products[2],
 ];
 
 type Props = {
