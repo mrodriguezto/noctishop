@@ -18,7 +18,6 @@ type Props = {
 
 const ProductCard = ({ product }: Props) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isImgLoaded, setIsImgLoaded] = useState(false);
 
   const productImage = useMemo(() => {
     return isHovered
@@ -35,7 +34,7 @@ const ProductCard = ({ product }: Props) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <Card>
-        <NextLink href="/product/slug" passHref prefetch={false}>
+        <NextLink href={`/product/${product.slug}`} passHref prefetch={false}>
           <Link>
             <CardActionArea>
               <CardMedia
@@ -43,17 +42,13 @@ const ProductCard = ({ product }: Props) => {
                 className="fadeIn"
                 image={productImage}
                 alt={product.title}
-                onLoad={() => setIsImgLoaded(true)}
               />
             </CardActionArea>
           </Link>
         </NextLink>
       </Card>
 
-      <Box
-        sx={{ mt: 1, display: isImgLoaded ? 'block' : 'none' }}
-        className="fadeIn"
-      >
+      <Box sx={{ mt: 1 }} className="fadeIn">
         <Typography fontWeight={700}>{product.title}</Typography>
         <Typography fontWeight={400}>{`$ ${product.price}`}</Typography>
       </Box>

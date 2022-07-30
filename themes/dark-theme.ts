@@ -39,14 +39,26 @@ export const darkTheme = createTheme({
       styleOverrides: {
         h1: {
           fontSize: 30,
-          fontWeight: 600,
+          fontWeight: 700,
         },
         h2: {
+          fontSize: 24,
+          fontWeight: 400,
+        },
+        h3: {
           fontSize: 20,
           fontWeight: 400,
         },
-        subtitle1: {
+        h4: {
           fontSize: 18,
+          fontWeight: 300,
+        },
+        h5: {
+          fontSize: 16,
+          fontWeight: 300,
+        },
+        subtitle1: {
+          fontSize: 16,
           fontWeight: 600,
         },
       },
