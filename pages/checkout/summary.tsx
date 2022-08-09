@@ -21,10 +21,10 @@ const SummaryPage: NextPage = () => {
         Resumen de la orden
       </Typography>
       <Grid container>
-        <Grid item xs={12} sm={7}>
+        <Grid item xs={12} sm={7} marginY={2}>
           <CartList />
         </Grid>
-        <Grid item xs={12} sm={5}>
+        <Grid item xs={12} sm={5} paddingX={2}>
           <Card elevation={1}>
             <CardContent>
               <Typography variant="h2">Resumen (3 productos)</Typography>

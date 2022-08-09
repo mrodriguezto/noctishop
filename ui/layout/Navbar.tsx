@@ -19,6 +19,7 @@ import {
   ShoppingCartOutlined,
 } from '@mui/icons-material';
 import { UIContext } from 'ui';
+import { CartContext } from 'features/cart';
 
 const categories = [
   { title: 'Hombres', path: 'men' },
@@ -30,6 +31,9 @@ const Navbar = () => {
   const { route, push } = useRouter();
 
   const { toggleSideMenu } = useContext(UIContext);
+  const {
+    order: { numberOfItems },
+  } = useContext(CartContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
@@ -54,15 +58,20 @@ const Navbar = () => {
         </NextLink>
 
         <Box flex={1} />
-
         <Box
           sx={{ display: isSearchVisible ? 'none' : { xs: 'none', sm: 'block' } }}
           className="fadeIn"
         >
           {categories.map(category => (
-            <NextLink key={category.path} href="/category/kid" passHref>
+            <NextLink
+              key={category.path}
+              href={`/category/${category.path}`}
+              passHref
+            >
               <Link>
-                <Button color={getColorByRoute('kid')}>Niños</Button>
+                <Button color={getColorByRoute(category.path)}>
+                  {category.title}
+                </Button>
               </Link>
             </NextLink>
           ))}
@@ -128,7 +137,10 @@ const Navbar = () => {
         <NextLink href="/cart" passHref>
           <Link>
             <IconButton>
-              <Badge badgeContent={2} color="secondary">
+              <Badge
+                badgeContent={numberOfItems > 99 ? '+99' : numberOfItems}
+                color="secondary"
+              >
                 <ShoppingCartOutlined />
               </Badge>
             </IconButton>

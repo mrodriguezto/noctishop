@@ -5,8 +5,10 @@
 
 # dependencies
 /node_modules
+/.yarn
 /.pnp
 .pnp.js
+.yarn/*
 
 # testing
 /coverage

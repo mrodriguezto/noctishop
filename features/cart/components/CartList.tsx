@@ -1,5 +1,5 @@
+import { useContext } from 'react';
 import NextLink from 'next/link';
-import { seedData } from 'database';
 import {
   Box,
   Button,
@@ -9,29 +9,42 @@ import {
   Link,
   Typography,
 } from '@mui/material';
-import { ItemCounter } from 'features/products';
 
-const productsInCart = [
-  seedData.initialData.products[0],
-  seedData.initialData.products[1],
-  seedData.initialData.products[2],
-];
+import { ItemCounter } from 'features/products';
+import { CartContext } from '..';
+import { ICartProduct } from 'types';
+import { currency } from 'utils/currency';
 
 type Props = {
   isEditable?: boolean;
 };
 
 const CartList = ({ isEditable = false }: Props) => {
+  const { cart, updateProductQuantity, removeProductInCart } =
+    useContext(CartContext);
+
+  const handleUpdateProduct = (product: ICartProduct, updatedValue: number) => {
+    product.quantity = updatedValue;
+    updateProductQuantity(product);
+  };
+
+  if (cart.length === 0)
+    return (
+      <Box display="flex" justifyContent="center" marginY={5}>
+        <Typography variant="body1">Aún no tiene productos en su carrito</Typography>
+      </Box>
+    );
+
   return (
     <>
-      {productsInCart.map(product => (
-        <Grid key={product.slug} container spacing={2} sx={{ mb: 1 }}>
+      {cart.map(product => (
+        <Grid key={product._id + product.size} container spacing={2} sx={{ mb: 1 }}>
           <Grid item xs={3}>
-            <NextLink href="/product/slug" passHref>
+            <NextLink href={`/product/${product.slug}`} passHref>
               <Link>
                 <CardActionArea>
                   <CardMedia
-                    image={`/products/${product.images[0]}`}
+                    image={`/products/${product.image}`}
                     component="img"
                     sx={{ borderRadius: '5px' }}
                   />
@@ -43,13 +56,19 @@ const CartList = ({ isEditable = false }: Props) => {
             <Box display="flex" flexDirection="column">
               <Typography variant="body1">{product.title}</Typography>
               <Typography variant="body1">
-                Talla: <strong>M</strong>
+                Talla: <strong>{product.size}</strong>
               </Typography>
 
               {isEditable ? (
-                <ItemCounter />
+                <ItemCounter
+                  currentValue={product.quantity}
+                  maxValue={product.inStock > 5 ? 5 : product.inStock}
+                  updateValue={updatedValue =>
+                    handleUpdateProduct(product, updatedValue)
+                  }
+                />
               ) : (
-                <Typography variant="h6">3 ítems</Typography>
+                <Typography variant="h6">{product.quantity} producto(s)</Typography>
               )}
             </Box>
           </Grid>
@@ -60,9 +79,15 @@ const CartList = ({ isEditable = false }: Props) => {
             alignItems="center"
             flexDirection="column"
           >
-            <Typography variant="subtitle1">{`$ ${product.price}`}</Typography>
+            <Typography variant="subtitle1">
+              {currency.format(product.price)}
+            </Typography>
 
-            {isEditable && <Button variant="text">Remover</Button>}
+            {isEditable && (
+              <Button variant="text" onClick={() => removeProductInCart(product)}>
+                Remover
+              </Button>
+            )}
           </Grid>
         </Grid>
       ))}

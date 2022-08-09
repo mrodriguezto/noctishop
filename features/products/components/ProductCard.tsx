@@ -5,12 +5,14 @@ import {
   Card,
   CardActionArea,
   CardMedia,
+  Chip,
   Grid,
   Link,
   Typography,
 } from '@mui/material';
 
 import { IProduct } from 'types/products';
+import { currency } from 'utils/currency';
 
 type Props = {
   product: IProduct;
@@ -37,6 +39,19 @@ const ProductCard = ({ product }: Props) => {
         <NextLink href={`/product/${product.slug}`} passHref prefetch={false}>
           <Link>
             <CardActionArea>
+              {product.inStock === 0 && (
+                <Chip
+                  color="error"
+                  variant="outlined"
+                  label="No disponible"
+                  sx={{
+                    position: 'absolute',
+                    zIndex: 99,
+                    top: '10px',
+                    right: '10px',
+                  }}
+                />
+              )}
               <CardMedia
                 component="img"
                 className="fadeIn"
@@ -50,7 +65,7 @@ const ProductCard = ({ product }: Props) => {
 
       <Box sx={{ mt: 1 }} className="fadeIn">
         <Typography fontWeight={700}>{product.title}</Typography>
-        <Typography fontWeight={400}>{`$ ${product.price}`}</Typography>
+        <Typography fontWeight={400}>{currency.format(product.price)}</Typography>
       </Box>
     </Grid>
   );
