@@ -1,29 +1,50 @@
 import { AppProps } from 'next/app';
 import { ThemeProvider } from '@mui/material/styles';
-import { CssBaseline } from '@mui/material';
+import { CssBaseline, Grow } from '@mui/material';
+import { SnackbarProvider } from 'notistack';
 import { SWRConfig } from 'swr';
+
+import { AuthProvider } from 'features/auth';
+import { CartProvider } from 'features/cart';
 import { darkTheme } from 'themes';
 import { UIProvider } from 'ui';
-import { CartProvider } from 'features/cart';
 import 'styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <AppProvider>
+      <CssBaseline />
+      <Component {...pageProps} />
+    </AppProvider>
+  );
+}
+
+const AppProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <SWRConfig
       value={{
         fetcher: (resource, init) => fetch(resource, init).then(res => res.json()),
       }}
     >
-      <CartProvider>
-        <UIProvider>
-          <ThemeProvider theme={darkTheme}>
-            <CssBaseline />
-            <Component {...pageProps} />
-          </ThemeProvider>
-        </UIProvider>
-      </CartProvider>
+      <SnackbarProvider
+        maxSnack={3}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        autoHideDuration={2000}
+        TransitionComponent={Grow}
+      >
+        <AuthProvider>
+          <CartProvider>
+            <UIProvider>
+              <ThemeProvider theme={darkTheme}>{children}</ThemeProvider>
+            </UIProvider>
+          </CartProvider>
+        </AuthProvider>
+      </SnackbarProvider>
     </SWRConfig>
   );
-}
+};
 
 export default MyApp;
