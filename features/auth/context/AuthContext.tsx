@@ -10,6 +10,7 @@ type ContextProps = {
     email: string,
     password: string,
   ) => Promise<RegisterReturnType>;
+  logout: () => void;
 };
 
 const AuthContext = createContext({} as ContextProps);

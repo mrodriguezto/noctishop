@@ -1,16 +1,19 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useReducer, useState } from 'react';
 import Cookie from 'js-cookie';
 
 import { CartContext, cartReducer } from '../';
-import { IOrderSummary, ICartProduct } from 'types';
+import { IOrderSummary, ICartProduct, IShippingAddress } from 'types';
+import { countries } from 'utils/countries';
 
 export type CartState = {
+  isLoaded: boolean;
   cart: ICartProduct[];
   order: IOrderSummary;
+  shippingAddress?: IShippingAddress;
 };
 
 const CART_INITIAL_STATE: CartState = {
+  isLoaded: false,
   cart: [],
   order: {
     numberOfItems: 0,
@@ -18,11 +21,11 @@ const CART_INITIAL_STATE: CartState = {
     tax: 0,
     total: 0,
   },
+  shippingAddress: undefined,
 };
 
 const CartProvider = ({ children }: { children: React.ReactNode }) => {
   // initializes after loading the cart from cookies
-  const [isInitialized, setIsInitialized] = useState(false);
   const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
 
   useEffect(() => {
@@ -32,15 +35,32 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
         : [];
 
       dispatch({ type: 'loadCart', payload: cookieProducts });
-      setIsInitialized(true);
     } catch (error) {
       dispatch({ type: 'loadCart', payload: [] });
     }
   }, []);
 
   useEffect(() => {
-    if (isInitialized) Cookie.set('cart', JSON.stringify(state.cart));
-  }, [state.cart]);
+    if (state.isLoaded) Cookie.set('cart', JSON.stringify(state.cart));
+  }, [state.cart, state.isLoaded]);
+
+  useEffect(() => {
+    // If firstname is not saved as a cookie, the same will happen to the rest of fields
+    if (Cookie.get('firstname')) {
+      const address = {
+        firstname: Cookie.get('firstname') || '',
+        lastname: Cookie.get('lastname') || '',
+        address: Cookie.get('address') || '',
+        address2: Cookie.get('address2') || '',
+        zip: Cookie.get('zip') || '',
+        city: Cookie.get('city') || '',
+        country: Cookie.get('country') || countries[0].code,
+        phone: Cookie.get('phone') || '',
+      };
+
+      dispatch({ type: 'loadShippingAddress', payload: address });
+    }
+  }, []);
 
   useEffect(() => {
     const numberOfItems = state.cart.reduce(
@@ -94,6 +114,18 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({ type: 'removeProductInCart', payload: product });
   };
 
+  const updateAddress = (address: IShippingAddress) => {
+    Cookie.set('firstname', address.firstname);
+    Cookie.set('lastname', address.lastname);
+    Cookie.set('address', address.address);
+    Cookie.set('address2', address.address2 || '');
+    Cookie.set('zip', address.zip);
+    Cookie.set('city', address.city);
+    Cookie.set('country', address.country);
+    Cookie.set('phone', address.phone);
+    dispatch({ type: 'updateShippingAddress', payload: address });
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -101,6 +133,7 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
         addProductToCart,
         updateProductQuantity,
         removeProductInCart,
+        updateAddress,
       }}
     >
       {children}

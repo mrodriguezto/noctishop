@@ -13,13 +13,24 @@ import {
   ListItemText,
   ListSubheader,
 } from '@mui/material';
-import { SearchOutlined } from '@mui/icons-material';
+import {
+  AccountCircleOutlined,
+  ConfirmationNumberOutlined,
+  EscalatorWarningOutlined,
+  FemaleOutlined,
+  LoginOutlined,
+  MaleOutlined,
+  SearchOutlined,
+  VpnKeyOutlined,
+} from '@mui/icons-material';
 
-import { sideMenuItems, sideMenuAdminItems } from 'utils/constants';
+import { sideMenuAdminItems } from 'utils/constants';
 import { UIContext } from 'ui';
+import { AuthContext } from 'features/auth';
 
 const SideMenu = () => {
   const { isMenuOpen, toggleSideMenu } = useContext(UIContext);
+  const { user, logout } = useContext(AuthContext);
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -62,30 +73,97 @@ const SideMenu = () => {
             />
           </ListItem>
 
-          {sideMenuItems.map(item => (
+          {/* General actions */}
+
+          {user && (
+            <>
+              <ListItem button>
+                <ListItemIcon>
+                  <AccountCircleOutlined />
+                </ListItemIcon>
+                <ListItemText primary={'Perfil'} />
+              </ListItem>
+
+              <ListItem button>
+                <ListItemIcon>
+                  <ConfirmationNumberOutlined />
+                </ListItemIcon>
+                <ListItemText primary={'Mis Ordenes'} />
+              </ListItem>
+            </>
+          )}
+
+          <ListItem
+            button
+            sx={{ display: { xs: '', sm: 'none' } }}
+            onClick={() => navigateTo('/category/men')}
+          >
+            <ListItemIcon>
+              <MaleOutlined />
+            </ListItemIcon>
+            <ListItemText primary={'Hombres'} />
+          </ListItem>
+
+          <ListItem
+            button
+            sx={{ display: { xs: '', sm: 'none' } }}
+            onClick={() => navigateTo('/category/women')}
+          >
+            <ListItemIcon>
+              <FemaleOutlined />
+            </ListItemIcon>
+            <ListItemText primary={'Mujeres'} />
+          </ListItem>
+
+          <ListItem
+            button
+            sx={{ display: { xs: '', sm: 'none' } }}
+            onClick={() => navigateTo('/category/kid')}
+          >
+            <ListItemIcon>
+              <EscalatorWarningOutlined />
+            </ListItemIcon>
+            <ListItemText primary={'Niños'} />
+          </ListItem>
+
+          {user ? (
+            <ListItem button onClick={logout}>
+              <ListItemIcon>
+                <LoginOutlined />
+              </ListItemIcon>
+              <ListItemText primary={'Salir'} />
+            </ListItem>
+          ) : (
             <ListItem
-              key={item.title}
               button
-              sx={() =>
-                item.isResponsive ? { display: { xs: '', sm: 'none' } } : {}
-              }
-              onClick={() => navigateTo(item.path)}
+              onClick={() => navigateTo(`/auth/login?p=${router.pathname}`)}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.title} />
+              <ListItemIcon>
+                <VpnKeyOutlined />
+              </ListItemIcon>
+              <ListItemText primary={'Ingresar'} />
             </ListItem>
-          ))}
+          )}
 
-          {/* Admin */}
-          <Divider />
-          <ListSubheader>Admin Panel</ListSubheader>
+          {/* Admin actions */}
 
-          {sideMenuAdminItems.map(item => (
-            <ListItem key={item.title} button onClick={() => navigateTo(item.path)}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.title} />
-            </ListItem>
-          ))}
+          {user && user.role === 'admin' && (
+            <>
+              <Divider />
+              <ListSubheader>Admin Panel</ListSubheader>
+
+              {sideMenuAdminItems.map(item => (
+                <ListItem
+                  key={item.title}
+                  button
+                  onClick={() => navigateTo(item.path)}
+                >
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.title} />
+                </ListItem>
+              ))}
+            </>
+          )}
         </List>
       </Box>
     </Drawer>

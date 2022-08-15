@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import {
   Box,
   Button,
@@ -9,10 +10,28 @@ import {
   Typography,
 } from '@mui/material';
 
-import { ShopLayout } from 'ui';
-import { CartList, OrderSummary } from 'features/cart';
+import { FullScreenLoading, ShopLayout } from 'ui';
+import { CartContext, CartList, OrderSummary } from 'features/cart';
+import { useContext, useEffect } from 'react';
 
 const CartPage: NextPage = () => {
+  const { isLoaded, cart } = useContext(CartContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoaded && cart.length === 0) {
+      router.replace('/cart/empty');
+    }
+  }, [isLoaded, router, cart]);
+
+  if (!isLoaded || cart.length === 0) {
+    return (
+      <ShopLayout pageTitle="Noctishop" pageDescription="Cargando">
+        <FullScreenLoading />
+      </ShopLayout>
+    );
+  }
+
   return (
     <ShopLayout
       pageTitle="Carrito - 3"
@@ -34,7 +53,12 @@ const CartPage: NextPage = () => {
               <OrderSummary />
 
               <Box sx={{ mt: 3 }}>
-                <Button color="primary" className="circular-btn" fullWidth>
+                <Button
+                  color="primary"
+                  className="circular-btn"
+                  fullWidth
+                  href="/checkout/address"
+                >
                   Checkout
                 </Button>
               </Box>

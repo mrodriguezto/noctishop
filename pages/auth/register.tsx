@@ -1,12 +1,10 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import type { NextPage } from 'next';
 import NextLink from 'next/link';
-import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { ErrorOutline } from '@mui/icons-material';
 
 import { AuthLayout } from 'ui';
-import { noctiApi } from 'api';
 import { validations } from 'utils/validations';
 import { useRouter } from 'next/router';
 import { AuthContext } from 'features/auth';
@@ -39,7 +37,8 @@ const RegisterPage: NextPage = () => {
       return;
     }
 
-    router.push('/');
+    const destination = router.query.p?.toString() || '/';
+    router.replace(destination);
   };
 
   return (
@@ -112,7 +111,12 @@ const RegisterPage: NextPage = () => {
               </Button>
             </Grid>
             <Grid item xs={12} display="flex" justifyContent="end">
-              <NextLink href="/auth/login" passHref>
+              <NextLink
+                href={
+                  router.query.p ? `/auth/login?p=${router.query.p}` : `/auth/login`
+                }
+                passHref
+              >
                 <Link underline="always">¿Ya tienes una cuenta?</Link>
               </NextLink>
             </Grid>

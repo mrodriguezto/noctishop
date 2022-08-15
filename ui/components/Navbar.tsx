@@ -15,11 +15,13 @@ import {
 } from '@mui/material';
 import {
   ClearOutlined,
+  MenuOutlined,
   SearchOutlined,
   ShoppingCartOutlined,
 } from '@mui/icons-material';
 import { UIContext } from 'ui';
 import { CartContext } from 'features/cart';
+import { AuthContext } from 'features/auth';
 
 const categories = [
   { title: 'Hombres', path: 'men' },
@@ -31,6 +33,7 @@ const Navbar = () => {
   const { route, push } = useRouter();
 
   const { toggleSideMenu } = useContext(UIContext);
+  const { isLoggedIn } = useContext(AuthContext);
   const {
     order: { numberOfItems },
   } = useContext(CartContext);
@@ -146,10 +149,11 @@ const Navbar = () => {
             </IconButton>
           </Link>
         </NextLink>
-
-        <Button onClick={toggleSideMenu} color="info">
-          Menú
-        </Button>
+        <Box marginX={1}>
+          <Button onClick={toggleSideMenu} color="info" aria-label="Menú">
+            <MenuOutlined />
+          </Button>
+        </Box>
       </Toolbar>
     </AppBar>
   );

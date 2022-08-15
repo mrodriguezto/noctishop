@@ -1,10 +1,11 @@
 import { useEffect, useReducer } from 'react';
+import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 import { noctiApi } from 'api';
 import { IUser, RegisterReturnType } from 'types';
 import { AuthContext, authReducer } from '..';
-import axios, { AxiosError } from 'axios';
 
 export type AuthState = {
   isLoggedIn: boolean;
@@ -18,9 +19,12 @@ const AUTH_INITIAL_STATE: AuthState = {
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
+  const router = useRouter();
 
   useEffect(() => {
     const checkToken = async () => {
+      if (!Cookies.get('token')) return;
+
       try {
         const {
           data: { user, token },
@@ -85,8 +89,15 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const logout = () => {
+    Cookies.remove('token');
+    Cookies.remove('cart');
+    dispatch({ type: 'logout' });
+    router.reload();
+  };
+
   return (
-    <AuthContext.Provider value={{ ...state, loginUser, registerUser }}>
+    <AuthContext.Provider value={{ ...state, loginUser, registerUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

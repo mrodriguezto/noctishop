@@ -1,4 +1,4 @@
-import { ICartProduct, IOrderSummary } from 'types';
+import { ICartProduct, IOrderSummary, IShippingAddress } from 'types';
 import { CartState } from './CartProvider';
 
 type CartActionType =
@@ -6,11 +6,18 @@ type CartActionType =
   | { type: 'updateCart'; payload: ICartProduct[] }
   | { type: 'updateProductQuantity'; payload: ICartProduct }
   | { type: 'removeProductInCart'; payload: ICartProduct }
-  | { type: 'updateOrderSummary'; payload: IOrderSummary };
+  | { type: 'updateOrderSummary'; payload: IOrderSummary }
+  | { type: 'loadShippingAddress'; payload: IShippingAddress }
+  | { type: 'updateShippingAddress'; payload: IShippingAddress };
 
 const cartReducer = (state: CartState, action: CartActionType): CartState => {
   switch (action.type) {
     case 'loadCart':
+      return {
+        ...state,
+        isLoaded: true,
+        cart: [...action.payload],
+      };
     case 'updateCart':
       return {
         ...state,
@@ -35,7 +42,14 @@ const cartReducer = (state: CartState, action: CartActionType): CartState => {
     case 'updateOrderSummary':
       return {
         ...state,
-        order: { ...action.payload },
+        order: action.payload,
+      };
+
+    case 'updateShippingAddress':
+    case 'loadShippingAddress':
+      return {
+        ...state,
+        shippingAddress: action.payload,
       };
 
     default:
