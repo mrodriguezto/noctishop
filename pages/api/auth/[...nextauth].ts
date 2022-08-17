@@ -1,0 +1,82 @@
+import { dbUsers } from 'database';
+import NextAuth from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
+import GithubProvider from 'next-auth/providers/github';
+
+export default NextAuth({
+  // Configure one or more authentication providers
+  providers: [
+    GithubProvider({
+      clientId: process.env.GITHUB_ID || '',
+      clientSecret: process.env.GITHUB_SECRET || '3s-unsecr3to00oo',
+    }),
+    Credentials({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Correo', type: 'email', placeholder: 'correo@example.com' },
+        password: {
+          label: 'Contraseña',
+          type: 'password',
+          placeholder: 'Contraseña',
+        },
+      },
+      async authorize(credentials) {
+        console.log({ credentials });
+
+        return await dbUsers.checkUserEmailPassword(
+          credentials!.email,
+          credentials!.password,
+        );
+      },
+    }),
+  ],
+
+  jwt: {
+    maxAge: 60 * 60 * 24 * 30, // 30d
+  },
+
+  pages: {
+    signIn: '/auth/login',
+    newUser: '/auth/register',
+  },
+
+  session: {
+    maxAge: 2592000, // 30d
+    strategy: 'jwt',
+    updateAge: 86400, // update session after 1d
+  },
+
+  callbacks: {
+    async jwt({ token, account, user }) {
+      if (account) {
+        token.accessToken = account.access_token;
+
+        switch (account.type) {
+          case 'oauth':
+            console.log('oauth aaaaaaaaaa');
+
+            token.user = await dbUsers.oAuthToDbUser(
+              user?.email || '',
+              user?.name || '',
+            );
+            break;
+          case 'credentials':
+            console.log('credentials aaaaaaaaaa');
+
+            token.user = user;
+            break;
+        }
+      }
+
+      // console.log({ token, account, user });
+      return token;
+    },
+    async session({ session, token }) {
+      session.accessToken = token.accessToken;
+      session.user = token.user as any;
+
+      // console.log({ session, token, user });
+      return session;
+    },
+  },
+});

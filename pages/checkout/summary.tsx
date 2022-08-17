@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import type { NextPage } from 'next';
 import NextLink from 'next/link';
 import {
@@ -11,16 +11,22 @@ import {
   Link,
   Typography,
 } from '@mui/material';
+import Cookies from 'js-cookie';
 
 import { FullScreenLoading, ShopLayout } from 'ui';
 import { CartContext, CartList, OrderSummary } from 'features/cart';
 import { countries } from 'utils/countries';
+import { useRouter } from 'next/router';
 
 const SummaryPage: NextPage = () => {
-  const {
-    shippingAddress,
-    order: { numberOfItems },
-  } = useContext(CartContext);
+  const router = useRouter();
+  const { shippingAddress, order: { numberOfItems } } = useContext(CartContext); // prettier-ignore
+
+  useEffect(() => {
+    if (!Cookies.get('firstname')) {
+      router.push('/checkout/address');
+    }
+  }, [router]);
 
   if (!shippingAddress) {
     return (

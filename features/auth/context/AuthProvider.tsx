@@ -1,5 +1,6 @@
 import { useEffect, useReducer } from 'react';
 import { useRouter } from 'next/router';
+import { useSession, signOut } from 'next-auth/react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
@@ -19,29 +20,40 @@ const AUTH_INITIAL_STATE: AuthState = {
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
+  const { data, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    const checkToken = async () => {
-      if (!Cookies.get('token')) return;
+    if (status === 'authenticated') {
+      console.log({ user: data.user });
 
-      try {
-        const {
-          data: { user, token },
-        } = await noctiApi.post('/auth/validate-token');
+      dispatch({ type: 'login', payload: data.user as IUser });
+    }
+  }, [status, data]);
 
-        dispatch({ type: 'login', payload: user });
-        Cookies.set('token', token);
-      } catch (error) {
-        Cookies.remove('token');
-      }
-    };
-    checkToken();
-  }, []);
+  // useEffect(() => {
+
+  //   checkToken();
+  // }, []);
+
+  const checkToken = async () => {
+    if (!Cookies.get('token')) return;
+
+    try {
+      const {
+        data: { user, token },
+      } = await noctiApi.post('/user/validate-token');
+
+      dispatch({ type: 'login', payload: user });
+      Cookies.set('token', token);
+    } catch (error) {
+      Cookies.remove('token');
+    }
+  };
 
   const loginUser = async (email: string, password: string) => {
     try {
-      const { data } = await noctiApi.post('/auth/login', { email, password });
+      const { data } = await noctiApi.post('/user/login', { email, password });
 
       const { token, user } = data;
 
@@ -59,7 +71,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     password: string,
   ): Promise<RegisterReturnType> => {
     try {
-      const { data } = await noctiApi.post('/auth/register', {
+      const { data } = await noctiApi.post('/user/register', {
         name,
         email,
         password,
@@ -90,10 +102,22 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const logout = () => {
-    Cookies.remove('token');
     Cookies.remove('cart');
-    dispatch({ type: 'logout' });
-    router.reload();
+
+    Cookies.remove('firstname');
+    Cookies.remove('lastname');
+    Cookies.remove('address');
+    Cookies.remove('address2');
+    Cookies.remove('zip');
+    Cookies.remove('city');
+    Cookies.remove('country');
+    Cookies.remove('phone');
+
+    signOut();
+
+    // dispatch({ type: 'logout' });
+    // router.reload();
+    // Cookies.remove('token');
   };
 
   return (

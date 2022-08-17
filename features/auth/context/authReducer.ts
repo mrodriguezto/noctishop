@@ -12,7 +12,7 @@ const authReducer = (state: AuthState, action: AuthActionType): AuthState => {
         user: action.payload,
       };
 
-    case 'login':
+    case 'logout':
       return {
         ...state,
         user: undefined,

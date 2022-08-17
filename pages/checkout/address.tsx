@@ -5,35 +5,35 @@ import {
   Box,
   Button,
   FormControl,
+  FormHelperText,
   Grid,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
   Typography,
 } from '@mui/material';
-import { useForm } from 'react-hook-form';
-import Cookies from 'js-cookie';
+import { Controller, useForm } from 'react-hook-form';
 
 import { ShopLayout } from 'ui';
 import { jwt } from 'utils/jwt';
 import { countries } from 'utils/countries';
 import { addressResolver } from 'utils/schemas';
 import { IShippingAddress } from 'types';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { CartContext } from 'features/cart';
 
 const AddressPage: NextPage = () => {
   const router = useRouter();
   const { shippingAddress, updateAddress } = useContext(CartContext);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IShippingAddress>({
+  const { control, register, handleSubmit, 
+    formState: { errors }, reset } = useForm<IShippingAddress>({
     resolver: addressResolver,
     defaultValues: shippingAddress,
-  });
+  }); // prettier-ignore
+
+  useEffect(() => {}, []);
 
   const onSubmitAddress = (data: IShippingAddress) => {
     updateAddress(data);
@@ -55,7 +55,7 @@ const AddressPage: NextPage = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               label="Nombre"
-              variant="filled"
+              variant="outlined"
               fullWidth
               {...register('firstname')}
               error={!!errors.firstname}
@@ -65,7 +65,7 @@ const AddressPage: NextPage = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               label="Apellido"
-              variant="filled"
+              variant="outlined"
               fullWidth
               {...register('lastname')}
               error={!!errors.lastname}
@@ -75,7 +75,7 @@ const AddressPage: NextPage = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               label="Dirección"
-              variant="filled"
+              variant="outlined"
               fullWidth
               {...register('address')}
               error={!!errors.address}
@@ -85,7 +85,7 @@ const AddressPage: NextPage = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               label="Dirección 2 (opcional)"
-              variant="filled"
+              variant="outlined"
               fullWidth
               {...register('address2')}
               error={!!errors.address2}
@@ -95,7 +95,7 @@ const AddressPage: NextPage = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               label="Código Postal"
-              variant="filled"
+              variant="outlined"
               fullWidth
               {...register('zip')}
               error={!!errors.zip}
@@ -105,7 +105,7 @@ const AddressPage: NextPage = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               label="Ciudad"
-              variant="filled"
+              variant="outlined"
               fullWidth
               {...register('city')}
               error={!!errors.city}
@@ -113,27 +113,30 @@ const AddressPage: NextPage = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <Select
-                variant="filled"
-                label="País"
-                defaultValue={shippingAddress?.country || countries[0].code}
-                {...register('country')}
-                error={!!errors.country}
-              >
-                {countries.map(({ code, name }) => (
-                  <MenuItem key={code} value={code}>
-                    {name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Controller
+              name="country"
+              control={control}
+              defaultValue={''}
+              render={({ field }) => (
+                <FormControl fullWidth error={!!errors.country}>
+                  <InputLabel>Country</InputLabel>
+                  <Select {...field} label="Country">
+                    {countries.map(country => (
+                      <MenuItem key={country.code} value={country.code}>
+                        {country.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>{errors.country?.message}</FormHelperText>
+                </FormControl>
+              )}
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               type="tel"
               label="Teléfono"
-              variant="filled"
+              variant="outlined"
               fullWidth
               {...register('phone')}
               error={!!errors.phone}

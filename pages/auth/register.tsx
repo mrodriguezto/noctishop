@@ -1,14 +1,15 @@
 import { useContext } from 'react';
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import NextLink from 'next/link';
+import { getSession, signIn } from 'next-auth/react';
 import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
 
 import { AuthLayout } from 'ui';
 import { validations } from 'utils/validations';
 import { useRouter } from 'next/router';
 import { AuthContext } from 'features/auth';
-import { useSnackbar } from 'notistack';
 
 type FormData = {
   name: string;
@@ -37,8 +38,10 @@ const RegisterPage: NextPage = () => {
       return;
     }
 
-    const destination = router.query.p?.toString() || '/';
-    router.replace(destination);
+    // const destination = router.query.p?.toString() || '/';
+    // router.replace(destination);
+
+    await signIn('credentials', { email, password });
   };
 
   return (
@@ -55,7 +58,7 @@ const RegisterPage: NextPage = () => {
               <TextField
                 label="Nombre completo"
                 type="text"
-                variant="filled"
+                variant="outlined"
                 fullWidth
                 {...register('name', {
                   required: 'Este campo es requerido',
@@ -72,7 +75,7 @@ const RegisterPage: NextPage = () => {
               <TextField
                 label="Correo"
                 type="email"
-                variant="filled"
+                variant="outlined"
                 fullWidth
                 {...register('email', {
                   required: 'Este campo es requerido',
@@ -86,7 +89,7 @@ const RegisterPage: NextPage = () => {
               <TextField
                 label="Contraseña"
                 type="password"
-                variant="filled"
+                variant="outlined"
                 fullWidth
                 {...register('password', {
                   required: 'Este campo es requerido',
@@ -125,6 +128,25 @@ const RegisterPage: NextPage = () => {
       </form>
     </AuthLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+  const session = await getSession({ req });
+
+  const { p = '/' } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: p.toString(),
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default RegisterPage;
