@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import NextLink from 'next/link';
 import {
@@ -6,6 +6,7 @@ import {
   Button,
   Card,
   CardContent,
+  Chip,
   Divider,
   Grid,
   Link,
@@ -20,13 +21,28 @@ import { useRouter } from 'next/router';
 
 const SummaryPage: NextPage = () => {
   const router = useRouter();
-  const { shippingAddress, order: { numberOfItems } } = useContext(CartContext); // prettier-ignore
+  const { shippingAddress, order: { numberOfItems }, createOrder } = useContext(CartContext); // prettier-ignore
+  const [isPosting, setIsPosting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     if (!Cookies.get('firstname')) {
       router.push('/checkout/address');
     }
   }, [router]);
+
+  const handleCreateOrder = async () => {
+    setIsPosting(true);
+    const { hasError, message } = await createOrder();
+
+    if (hasError) {
+      setIsPosting(false);
+      setErrorMessage(message);
+      return;
+    }
+
+    router.replace(`/orders/${message}`); // orders/orderId
+  };
 
   if (!shippingAddress) {
     return (
@@ -90,10 +106,23 @@ const SummaryPage: NextPage = () => {
 
               <OrderSummary />
 
-              <Box sx={{ mt: 3 }}>
-                <Button color="primary" className="circular-btn" fullWidth>
+              <Box sx={{ mt: 3 }} display="flex" flexDirection="column">
+                <Button
+                  color="primary"
+                  className="circular-btn"
+                  fullWidth
+                  onClick={handleCreateOrder}
+                  disabled={isPosting}
+                >
                   Confirmar orden
                 </Button>
+
+                <Chip
+                  color="error"
+                  variant="outlined"
+                  label={errorMessage}
+                  sx={{ display: errorMessage ? 'flex' : 'none', mt: 2 }}
+                />
               </Box>
             </CardContent>
           </Card>

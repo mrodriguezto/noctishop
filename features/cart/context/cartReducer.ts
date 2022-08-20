@@ -8,7 +8,8 @@ type CartActionType =
   | { type: 'removeProductInCart'; payload: ICartProduct }
   | { type: 'updateOrderSummary'; payload: IOrderSummary }
   | { type: 'loadShippingAddress'; payload: IShippingAddress }
-  | { type: 'updateShippingAddress'; payload: IShippingAddress };
+  | { type: 'updateShippingAddress'; payload: IShippingAddress }
+  | { type: 'completeOrder' };
 
 const cartReducer = (state: CartState, action: CartActionType): CartState => {
   switch (action.type) {
@@ -50,6 +51,18 @@ const cartReducer = (state: CartState, action: CartActionType): CartState => {
       return {
         ...state,
         shippingAddress: action.payload,
+      };
+
+    case 'completeOrder':
+      return {
+        ...state,
+        cart: [],
+        order: {
+          numberOfItems: 0,
+          subTotal: 0,
+          tax: 0,
+          total: 0,
+        },
       };
 
     default:

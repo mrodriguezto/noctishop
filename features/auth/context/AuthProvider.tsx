@@ -21,12 +21,9 @@ const AUTH_INITIAL_STATE: AuthState = {
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
   const { data, status } = useSession();
-  const router = useRouter();
 
   useEffect(() => {
     if (status === 'authenticated') {
-      console.log({ user: data.user });
-
       dispatch({ type: 'login', payload: data.user as IUser });
     }
   }, [status, data]);
@@ -36,20 +33,20 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   //   checkToken();
   // }, []);
 
-  const checkToken = async () => {
-    if (!Cookies.get('token')) return;
+  // const checkToken = async () => {
+  //   if (!Cookies.get('token')) return;
 
-    try {
-      const {
-        data: { user, token },
-      } = await noctiApi.post('/user/validate-token');
+  //   try {
+  //     const {
+  //       data: { user, token },
+  //     } = await noctiApi.post('/user/validate-token');
 
-      dispatch({ type: 'login', payload: user });
-      Cookies.set('token', token);
-    } catch (error) {
-      Cookies.remove('token');
-    }
-  };
+  //     dispatch({ type: 'login', payload: user });
+  //     Cookies.set('token', token);
+  //   } catch (error) {
+  //     Cookies.remove('token');
+  //   }
+  // };
 
   const loginUser = async (email: string, password: string) => {
     try {

@@ -3,9 +3,9 @@ import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
 export async function middleware(req: NextRequest) {
-  const session = await getToken({ req });
+  const token = await getToken({ req });
 
-  if (!session) {
+  if (!token) {
     const requestedPage = req.nextUrl.pathname;
     const url = req.nextUrl.clone();
     url.pathname = `/auth/login`;

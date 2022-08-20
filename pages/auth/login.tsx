@@ -3,13 +3,15 @@ import type { NextPage } from 'next';
 import { GetServerSideProps } from 'next';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { getSession, signIn, getProviders } from 'next-auth/react';
+import { signIn, getProviders } from 'next-auth/react';
+import { unstable_getServerSession } from 'next-auth';
 import { Box, Button, Chip, Divider, Grid, Link, TextField, Typography } from '@mui/material'; // prettier-ignore
 import { useForm } from 'react-hook-form';
 import { ErrorOutline } from '@mui/icons-material';
 
 import { AuthLayout } from 'ui';
 import { validations } from 'utils/validations';
+import { getToken } from 'next-auth/jwt';
 
 type FormData = {
   email: string;
@@ -30,19 +32,6 @@ const LoginPage: NextPage = () => {
 
   const onLoginUser = async ({ email, password }: FormData) => {
     setShowError(false);
-
-    // const isLoginValid = await loginUser(email, password);
-
-    // if (!isLoginValid) {
-    //   setShowError(true);
-    //   setTimeout(() => {
-    //     setShowError(false);
-    //   }, 3000);
-    //   return;
-    // }
-
-    // const destination = router.query.p?.toString() || '/';
-    // router.replace(destination);
 
     await signIn('credentials', { email, password });
   };
@@ -147,11 +136,11 @@ const LoginPage: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
-  const session = await getSession({ req });
+  const token = await getToken({ req });
 
   const { p = '/' } = query;
 
-  if (session) {
+  if (token) {
     return {
       redirect: {
         destination: p.toString(),

@@ -31,9 +31,9 @@ export default NextAuth({
     }),
   ],
 
-  jwt: {
-    maxAge: 60 * 60 * 24 * 30, // 30d
-  },
+  // jwt: {
+  //   maxAge: 60 * 60 * 24 * 30, // 30d
+  // },
 
   pages: {
     signIn: '/auth/login',

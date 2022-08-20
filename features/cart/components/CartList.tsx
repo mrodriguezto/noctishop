@@ -12,14 +12,15 @@ import {
 
 import { ItemCounter } from 'features/products';
 import { CartContext } from '..';
-import { ICartProduct } from 'types';
+import { ICartProduct, IOrderItem } from 'types';
 import { currency } from 'utils/currency';
 
 type Props = {
   isEditable?: boolean;
+  products?: IOrderItem[];
 };
 
-const CartList = ({ isEditable = false }: Props) => {
+const CartList = ({ isEditable = false, products }: Props) => {
   const { cart, updateProductQuantity, removeProductInCart } =
     useContext(CartContext);
 
@@ -28,7 +29,9 @@ const CartList = ({ isEditable = false }: Props) => {
     updateProductQuantity(product);
   };
 
-  if (cart.length === 0)
+  const productsToShow = products ? products : cart;
+
+  if (productsToShow.length === 0)
     return (
       <Box display="flex" justifyContent="center" marginY={5}>
         <Typography variant="body1">Aún no tiene productos en su carrito</Typography>
@@ -37,8 +40,8 @@ const CartList = ({ isEditable = false }: Props) => {
 
   return (
     <>
-      {cart.map(product => (
-        <Grid key={product._id + product.size} container spacing={2} sx={{ mb: 1 }}>
+      {productsToShow.map(product => (
+        <Grid key={product._id + product.size} container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={3}>
             <NextLink href={`/product/${product.slug}`} passHref>
               <Link>
@@ -62,9 +65,9 @@ const CartList = ({ isEditable = false }: Props) => {
               {isEditable ? (
                 <ItemCounter
                   currentValue={product.quantity}
-                  maxValue={product.inStock > 5 ? 5 : product.inStock}
+                  maxValue={5}
                   updateValue={updatedValue =>
-                    handleUpdateProduct(product, updatedValue)
+                    handleUpdateProduct(product as ICartProduct, updatedValue)
                   }
                 />
               ) : (
@@ -84,7 +87,10 @@ const CartList = ({ isEditable = false }: Props) => {
             </Typography>
 
             {isEditable && (
-              <Button variant="text" onClick={() => removeProductInCart(product)}>
+              <Button
+                variant="text"
+                onClick={() => removeProductInCart(product as ICartProduct)}
+              >
                 Remover
               </Button>
             )}

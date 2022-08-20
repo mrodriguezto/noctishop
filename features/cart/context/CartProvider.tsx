@@ -1,9 +1,12 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import Cookie from 'js-cookie';
 
 import { CartContext, cartReducer } from '../';
 import { IOrderSummary, ICartProduct, IShippingAddress } from 'types';
 import { countries } from 'utils/countries';
+import { noctiApi } from 'api';
+import { IOrder } from 'types/order';
+import axios from 'axios';
 
 export type CartState = {
   isLoaded: boolean;
@@ -126,6 +129,49 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({ type: 'updateShippingAddress', payload: address });
   };
 
+  const createOrder = async (): Promise<{ hasError: boolean; message: string }> => {
+    if (!state.shippingAddress) {
+      throw new Error('No hay dirección de entrega');
+    }
+
+    const body: IOrder = {
+      orderItems: state.cart.map(p => ({
+        ...p,
+        size: p.size!,
+      })),
+      shippingAddress: state.shippingAddress,
+      numberOfItems: state.order.numberOfItems,
+      subTotal: state.order.subTotal,
+      tax: state.order.tax,
+      total: state.order.total,
+      isPaid: false,
+    };
+
+    try {
+      const { data } = await noctiApi.post<IOrder>('/orders', body);
+
+      dispatch({ type: 'completeOrder' });
+
+      return {
+        hasError: false,
+        message: data._id!,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const { message } = error.response?.data as { message: string };
+        return {
+          hasError: true,
+          message,
+        };
+      }
+
+      return {
+        hasError: true,
+        message: 'Unidentified error. Contact an admin',
+      };
+    }
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -134,6 +180,7 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
         updateProductQuantity,
         removeProductInCart,
         updateAddress,
+        createOrder,
       }}
     >
       {children}
