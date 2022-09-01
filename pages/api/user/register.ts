@@ -12,21 +12,21 @@ type Data = { message: string } | { token: string; user: IApiUser };
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   switch (req.method) {
     case 'POST':
-      return loginUser(req, res);
+      return registerUser(req, res);
 
     default:
       res.status(400).json({ message: 'Bad Request' });
   }
 }
 
-type LoginBody = {
+type RegisterBody = {
   email: string;
   password: string;
   name: string;
 };
 
-async function loginUser(req: NextApiRequest, res: NextApiResponse<Data>) {
-  const { email = '', password = '', name = '' } = req.body as LoginBody;
+async function registerUser(req: NextApiRequest, res: NextApiResponse<Data>) {
+  const { email = '', password = '', name = '' } = req.body as RegisterBody;
 
   // Validations
 

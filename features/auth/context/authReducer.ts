@@ -1,4 +1,4 @@
-import { AuthProvider, AuthState } from '..';
+import { AuthState } from '..';
 import { IUser } from 'types';
 
 type AuthActionType = { type: 'login'; payload: IUser } | { type: 'logout' };

@@ -2,16 +2,15 @@ import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import { GetServerSideProps } from 'next';
 import NextLink from 'next/link';
+import { getToken } from 'next-auth/jwt';
 import { useRouter } from 'next/router';
 import { signIn, getProviders } from 'next-auth/react';
-import { unstable_getServerSession } from 'next-auth';
 import { Box, Button, Chip, Divider, Grid, Link, TextField, Typography } from '@mui/material'; // prettier-ignore
 import { useForm } from 'react-hook-form';
 import { ErrorOutline } from '@mui/icons-material';
 
 import { AuthLayout } from 'ui';
 import { validations } from 'utils/validations';
-import { getToken } from 'next-auth/jwt';
 
 type FormData = {
   email: string;

@@ -53,16 +53,12 @@ export default NextAuth({
 
         switch (account.type) {
           case 'oauth':
-            console.log('oauth aaaaaaaaaa');
-
             token.user = await dbUsers.oAuthToDbUser(
               user?.email || '',
               user?.name || '',
             );
             break;
           case 'credentials':
-            console.log('credentials aaaaaaaaaa');
-
             token.user = user;
             break;
         }
