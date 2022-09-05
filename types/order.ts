@@ -32,6 +32,8 @@ export type IOrder = {
 
   isPaid: boolean;
   paidAt?: string;
+
+  transactionId?: string;
 };
 
 export type IOrderItem = {

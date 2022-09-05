@@ -599,6 +599,37 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@paypal/paypal-js@npm:^5.0.6":
+  version: 5.1.1
+  resolution: "@paypal/paypal-js@npm:5.1.1"
+  dependencies:
+    promise-polyfill: ^8.2.3
+  checksum: ef8a86890c68794b19519da2ba9011caa62728d33ca260214729ad6b0a752779aa696cf8982aeea699368fa0d94a602458f3239b189ac9a214686758c1404850
+  languageName: node
+  linkType: hard
+
+"@paypal/react-paypal-js@npm:^7.8.1":
+  version: 7.8.1
+  resolution: "@paypal/react-paypal-js@npm:7.8.1"
+  dependencies:
+    "@paypal/paypal-js": ^5.0.6
+    "@paypal/sdk-constants": ^1.0.116
+  peerDependencies:
+    react: ">=16.3.0"
+    react-dom: ">=16.3.0"
+  checksum: 1b31c831643a41602821591a9f9b9f4600aa04ee2fcb39e3e9cd29e5464621e57e6d416e868d7edf17323126b338fbdacf5e9d0e65b8f743a42c20920755c5d6
+  languageName: node
+  linkType: hard
+
+"@paypal/sdk-constants@npm:^1.0.116":
+  version: 1.0.124
+  resolution: "@paypal/sdk-constants@npm:1.0.124"
+  dependencies:
+    hi-base32: ^0.5.0
+  checksum: 4cc092bf70611d7fe9c49f8735161763a7c7d586f432bb7d26aeb105868878cfd8a7f0866004807158027d37000672acac5e5e19912c88d3d7a4bc19c68b0103
+  languageName: node
+  linkType: hard
+
 "@popperjs/core@npm:^2.11.5":
   version: 2.11.5
   resolution: "@popperjs/core@npm:2.11.5"
@@ -1972,6 +2003,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hi-base32@npm:^0.5.0":
+  version: 0.5.1
+  resolution: "hi-base32@npm:0.5.1"
+  checksum: 6655682b5796d75ed3068071e61d05a490e2086c4908af3b94a730059147b8a4a5e8870e656b828d0550dcc9988d8748bda54a53e428cbce28e0d7a785b2ffde
+  languageName: node
+  linkType: hard
+
 "hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.1":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
@@ -2703,6 +2741,7 @@ __metadata:
     "@mui/icons-material": ^5.8.4
     "@mui/material": ^5.9.2
     "@mui/x-data-grid": ^5.14.0
+    "@paypal/react-paypal-js": ^7.8.1
     "@types/bcryptjs": ^2.4.2
     "@types/js-cookie": ^3.0.2
     "@types/jsonwebtoken": ^8.5.8
@@ -3019,6 +3058,13 @@ __metadata:
   version: 3.8.0
   resolution: "pretty-format@npm:3.8.0"
   checksum: 21a114d43ef06978f8f7f6212be4649b0b094f05d9b30e14e37550bf35c8ca24d8adbca9e5adc4cc15d9eaf7a1e7a30478a4dc37b30982bfdf0292a5b385484c
+  languageName: node
+  linkType: hard
+
+"promise-polyfill@npm:^8.2.3":
+  version: 8.2.3
+  resolution: "promise-polyfill@npm:8.2.3"
+  checksum: f320278bab8b8ce32f0e2f377d75aabe35c90a79f92b3e001db084d635da1fb8740ba8a26b5c1c2b4cdca5a4c988f9b6b3eb30f0b151d0362d3d9c1675024a8f
   languageName: node
   linkType: hard
 
