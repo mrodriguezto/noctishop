@@ -2,6 +2,7 @@ import {
   AdminPanelSettings,
   CategoryOutlined,
   ConfirmationNumberOutlined,
+  DashboardOutlined,
 } from '@mui/icons-material';
 
 type ListAdminItem = {
@@ -11,6 +12,11 @@ type ListAdminItem = {
 };
 
 export const sideMenuAdminItems: ListAdminItem[] = [
+  {
+    icon: <DashboardOutlined />,
+    title: 'Dashboard',
+    path: '/admin',
+  },
   {
     icon: <CategoryOutlined />,
     title: 'Productos',

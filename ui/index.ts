@@ -8,6 +8,7 @@ export { default as UIProvider } from './context/UIProvider';
 
 export { default as ShopLayout } from './layout/ShopLayout';
 export { default as AuthLayout } from './layout/AuthLayout';
+export { default as AdminLayout } from './layout/AdminLayout';
 
 // Components
 

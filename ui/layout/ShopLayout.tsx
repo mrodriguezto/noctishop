@@ -34,8 +34,6 @@ const ShopLayout = ({ children, pageTitle, pageDescription, imgFullUrl }: Props)
       >
         {children}
       </main>
-
-      <footer>{/* TODO: footer */}</footer>
     </>
   );
 };
