@@ -94,10 +94,10 @@ const OrderPage: NextPage<Props> = ({ order }) => {
       )}
 
       <Grid container>
-        <Grid item xs={12} sm={7}>
+        <Grid item xs={12} sm={7} marginY={2}>
           <CartList isEditable={false} products={order.orderItems} />
         </Grid>
-        <Grid item xs={12} sm={5}>
+        <Grid item xs={12} sm={5} paddingX={2}>
           <Card elevation={1}>
             <CardContent>
               <Typography variant="h2">
