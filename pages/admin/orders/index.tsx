@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { ConfirmationNumberOutlined } from '@mui/icons-material';
 import { Grid } from '@mui/material';
 
-import { AdminOrdersTable } from 'features/orders';
+import { AdminOrdersTable } from 'features/admin';
 import { AdminLayout } from 'ui';
 
 const OrdersPage: NextPage = () => {

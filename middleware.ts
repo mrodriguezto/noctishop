@@ -21,6 +21,8 @@ export async function middleware(req: NextRequest) {
       if (!validApiRoles.includes(session.user.role)) {
         return redirectToUnathorized(req);
       }
+
+      return NextResponse.next();
     }
   }
 
