@@ -30,10 +30,10 @@ const AdminLayout = ({ children, title, subtitle, icon }: Props) => {
         }}
       >
         <Box display="flex" flexDirection="column">
-          <Typography variant="h1" component="h1" marginBottom={4}>
+          <Typography variant="h1" component="h1" marginBottom={3}>
             {icon} {title}
           </Typography>
-          <Typography variant="h2" marginBottom={3}>
+          <Typography variant="h2" marginBottom={2}>
             {subtitle}
           </Typography>
         </Box>

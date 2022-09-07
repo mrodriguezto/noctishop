@@ -20,16 +20,16 @@ export const sideMenuAdminItems: ListAdminItem[] = [
   {
     icon: <CategoryOutlined />,
     title: 'Productos',
-    path: '/',
+    path: '/admin/products',
   },
   {
     icon: <ConfirmationNumberOutlined />,
     title: 'Ordenes',
-    path: '/',
+    path: '/admin/orders',
   },
   {
     icon: <AdminPanelSettings />,
     title: 'Usuarios',
-    path: '/',
+    path: '/admin/users',
   },
 ];
