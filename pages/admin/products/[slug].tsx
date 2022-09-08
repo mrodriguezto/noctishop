@@ -1,18 +1,16 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import { AdminLayout } from 'ui';
 import { IProduct } from 'types';
-import {
-  DriveFileRenameOutline,
-  SaveOutlined,
-  UploadOutlined,
-} from '@mui/icons-material';
+import { DriveFileRenameOutline,SaveOutlined, UploadOutlined } from '@mui/icons-material'; // prettier-ignore
 import { dbProducts } from 'database';
-import { Box,Button,Card,CardActions,CardMedia,Checkbox,
-        Chip,Divider,FormControl,FormControlLabel,FormGroup,FormLabel,
-        Grid,ListItem,Paper,Radio,RadioGroup,TextField } from '@mui/material'; // prettier-ignore
+import { Box,Button,Card,CardActions,CardMedia,Checkbox,Chip,Divider,FormControl,
+  FormControlLabel,FormGroup,FormLabel,Grid,Radio,RadioGroup,TextField } from '@mui/material'; // prettier-ignore
 import { useForm } from 'react-hook-form';
 import { adminProductResolver } from 'utils/schemas';
+import { useSnackbar } from 'notistack';
+import { noctiApi } from 'api';
 
 const validTypes = ['shirts', 'pants', 'hoodies', 'hats'];
 const validGender = ['men', 'women', 'kid', 'unisex'];
@@ -38,18 +36,16 @@ type Props = {
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
   const [newTagValue, setNewTagValue] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    getValues,
-    setValue,
-    watch,
-  } = useForm<FormData>({
-    defaultValues: product,
-    resolver: adminProductResolver,
-  });
+  const {register,handleSubmit,formState: { errors },getValues,setValue,watch} 
+        = useForm<FormData>({
+            defaultValues: product,
+            resolver: adminProductResolver,
+          }); // prettier-ignore
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
@@ -100,24 +96,25 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   };
 
   const onSubmit = async (form: FormData) => {
-    // if ( form.images.length < 2 ) return alert('Mínimo 2 imagenes');
-    // setIsSaving(true);
-    // try {
-    //     const { data } = await tesloApi({
-    //         url: '/admin/products',
-    //         method: form._id ? 'PUT': 'POST',  // si tenemos un _id, entonces actualizar, si no crear
-    //         data: form
-    //     });
-    //     console.log({data});
-    //     if ( !form._id ) {
-    //         router.replace(`/admin/products/${ form.slug }`);
-    //     } else {
-    //         setIsSaving(false)
-    //     }
-    // } catch (error) {
-    //     console.log(error);
-    //     setIsSaving(false);
-    // }
+    if (form.images.length < 2)
+      return enqueueSnackbar('Mínimo dos imágenes', { variant: 'warning' });
+    setIsSaving(true);
+    try {
+      const { data } = await noctiApi({
+        url: '/admin/products',
+        method: form._id ? 'PUT' : 'POST', // si tenemos un _id, entonces actualizar, si no crear
+        data: form,
+      });
+      console.log({ data });
+      if (!form._id) {
+        router.replace(`/admin/products/${form.slug}`);
+      } else {
+        setIsSaving(false);
+      }
+    } catch (error) {
+      console.log(error);
+      enqueueSnackbar('Ocurrió un error', { variant: 'error' });
+    }
   };
 
   return (
@@ -143,7 +140,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           <Grid item xs={12} sm={6}>
             <TextField
               label="Título"
-              variant="filled"
               fullWidth
               sx={{ mb: 1 }}
               {...register('title')}
@@ -153,7 +149,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
             <TextField
               label="Descripción"
-              variant="filled"
               fullWidth
               multiline
               sx={{ mb: 1 }}
@@ -165,7 +160,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             <TextField
               label="Inventario"
               type="number"
-              variant="filled"
               fullWidth
               sx={{ mb: 1 }}
               {...register('inStock')}
@@ -176,7 +170,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             <TextField
               label="Precio"
               type="number"
-              variant="filled"
               fullWidth
               sx={{ mb: 1 }}
               {...register('price')}
@@ -243,7 +236,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           <Grid item xs={12} sm={6}>
             <TextField
               label="Slug - URL"
-              variant="filled"
               fullWidth
               sx={{ mb: 1 }}
               {...register('slug')}
@@ -253,7 +245,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
             <TextField
               label="Etiquetas"
-              variant="filled"
               fullWidth
               sx={{ mb: 1 }}
               helperText="Presiona [ENTER] para agregar"

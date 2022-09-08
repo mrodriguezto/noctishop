@@ -46,7 +46,7 @@ const AdminDashboard = () => {
     numberOfProducts,
     productsWithNoInventory,
     lowInventory,
-    notPaidOrders,
+    unpaidOrders,
   } = data!;
 
   return (
@@ -64,7 +64,7 @@ const AdminDashboard = () => {
       />
 
       <SummaryTile
-        title={notPaidOrders}
+        title={unpaidOrders}
         subTitle="Ordenes pendientes"
         icon={<CreditCardOffOutlined color="error" sx={{ fontSize: 40 }} />}
       />

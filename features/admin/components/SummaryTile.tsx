@@ -9,7 +9,7 @@ type Props = {
 const SummaryTile = ({ title, subTitle, icon }: Props) => {
   return (
     <Grid item xs={12} sm={4} md={3}>
-      <Card sx={{ display: 'flex', padding: '4px 6px' }} elevation={2}>
+      <Card sx={{ display: 'flex', padding: '4px 6px' }} elevation={1}>
         <CardContent>
           {icon}
           <Box paddingLeft={0.3}>

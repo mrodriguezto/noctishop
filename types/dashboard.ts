@@ -5,5 +5,5 @@ export interface DashboardSummaryResponse {
   numberOfProducts: number;
   productsWithNoInventory: number;
   lowInventory: number;
-  notPaidOrders: number;
+  unpaidOrders: number;
 }
