@@ -15,3 +15,13 @@ export const addressResolver = yupResolver(
     })
     .required(),
 );
+
+export const adminProductResolver = yupResolver(
+  yup.object({
+    title: yup.string().required(),
+    description: yup.string().required(),
+    price: yup.number().min(0, 'El valor mínimo debe ser de 0'),
+    slug: yup.string().required().trim().matches(/^\S+$/, 'No debe tener espacios'),
+    inStock: yup.string().required(),
+  }),
+);

@@ -2,7 +2,7 @@ import { db } from 'database';
 import { Product } from 'models';
 import { IProduct } from 'types';
 
-export const getProductsBySlug = async (slug: string): Promise<IProduct | null> => {
+export const getProductBySlug = async (slug: string): Promise<IProduct | null> => {
   await db.connect();
 
   const product = await Product.findOne({ slug }).lean();
