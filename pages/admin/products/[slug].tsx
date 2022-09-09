@@ -17,7 +17,6 @@ const validGender = ['men', 'women', 'kid', 'unisex'];
 const validSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
 
 type FormData = {
-  _id?: string;
   description: string;
   images: string[];
   inStock: number;
@@ -95,6 +94,31 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue('tags', updatedTags, { shouldValidate: true });
   };
 
+  const handleFilesSelected = async ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    if (!target.files || target.files.length === 0) {
+      return;
+    }
+
+    try {
+      // console.log( file );
+      for (const file of target.files) {
+        const formData = new FormData();
+        formData.append('file', file);
+        const { data } = await noctiApi.post<{ message: string }>(
+          '/admin/upload',
+          formData,
+        );
+        setValue('images', [...getValues('images'), data.message], {
+          shouldValidate: true,
+        });
+      }
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
   const onSubmit = async (form: FormData) => {
     if (form.images.length < 2)
       return enqueueSnackbar('Mínimo dos imágenes', { variant: 'warning' });
@@ -102,13 +126,14 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     try {
       const { data } = await noctiApi({
         url: '/admin/products',
-        method: form._id ? 'PUT' : 'POST', // si tenemos un _id, entonces actualizar, si no crear
+        method: product._id ? 'PUT' : 'POST',
         data: form,
       });
       console.log({ data });
-      if (!form._id) {
+      if (!product._id) {
         router.replace(`/admin/products/${form.slug}`);
       } else {
+        enqueueSnackbar('Producto actualizado', { variant: 'success' });
         setIsSaving(false);
       }
     } catch (error) {
@@ -247,10 +272,10 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               label="Etiquetas"
               fullWidth
               sx={{ mb: 1 }}
-              helperText="Presiona [ENTER] para agregar"
+              helperText="Presiona [SPACE] para agregar"
               value={newTagValue}
               onChange={({ target }) => setNewTagValue(target.value)}
-              onKeyUp={e => (e.key === 'Enter' ? handleAddTag() : undefined)}
+              onKeyUp={({ code }) => (code === 'Space' ? handleAddTag() : undefined)}
             />
 
             <Box
@@ -286,9 +311,18 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 fullWidth
                 startIcon={<UploadOutlined />}
                 sx={{ mb: 3 }}
+                onClick={() => fileInputRef.current?.click()}
               >
                 Cargar imagen
               </Button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept="image/png, image/gif, image/jpeg"
+                style={{ display: 'none' }}
+                onChange={handleFilesSelected}
+              />
 
               <Chip label="Mínimo 2 imágenes" color="error" variant="outlined" />
 
@@ -322,7 +356,24 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { slug = '' } = query;
 
-  const product = await dbProducts.getProductBySlug(slug.toString());
+  let product: Partial<IProduct> | null;
+
+  if (slug === 'new') {
+    product = {
+      description: '',
+      images: ['img1', 'img2'],
+      inStock: 0,
+      price: 0,
+      sizes: [],
+      slug: '',
+      tags: [],
+      title: '',
+      type: 'shirts',
+      gender: 'women',
+    };
+  } else {
+    product = await dbProducts.getProductBySlug(slug.toString());
+  }
 
   if (!product) {
     return {
