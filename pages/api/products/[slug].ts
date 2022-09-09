@@ -32,5 +32,11 @@ async function getProductsBySlug(req: NextApiRequest, res: NextApiResponse<Data>
     });
   }
 
+  product.images = product.images.map(image => {
+    return image.includes('http')
+      ? image
+      : `${process.env.HOST_NAME}products/${image}`;
+  });
+
   res.status(200).json(product);
 }

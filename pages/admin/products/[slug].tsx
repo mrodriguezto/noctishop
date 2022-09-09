@@ -119,6 +119,14 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     }
   };
 
+  const handleDeleteImage = (image: string) => {
+    setValue(
+      'images',
+      getValues('images').filter(img => img !== image),
+      { shouldValidate: true },
+    );
+  };
+
   const onSubmit = async (form: FormData) => {
     if (form.images.length < 2)
       return enqueueSnackbar('Mínimo dos imágenes', { variant: 'warning' });
@@ -324,21 +332,30 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 onChange={handleFilesSelected}
               />
 
-              <Chip label="Mínimo 2 imágenes" color="error" variant="outlined" />
+              <Chip
+                label="Mínimo dos imágenes"
+                color="error"
+                variant="outlined"
+                sx={{ display: getValues('images').length < 2 ? 'flex' : 'none' }}
+              />
 
               <Grid container spacing={2}>
-                {product.images.map(img => (
+                {getValues('images').map(img => (
                   <Grid item xs={4} sm={3} key={img}>
                     <Card>
                       <CardMedia
                         component="img"
                         className="fadeIn"
-                        image={`/products/${img}`}
+                        image={img}
                         alt={img}
                       />
                       <CardActions>
-                        <Button fullWidth color="error">
-                          Borrar
+                        <Button
+                          fullWidth
+                          color="error"
+                          onClick={() => handleDeleteImage(img)}
+                        >
+                          Eliminar
                         </Button>
                       </CardActions>
                     </Card>
