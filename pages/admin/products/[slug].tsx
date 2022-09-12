@@ -1,16 +1,18 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import { GetServerSideProps } from 'next';
+import { useEffect, useState } from 'react';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { AdminLayout } from 'ui';
-import { IProduct } from 'types';
-import { DriveFileRenameOutline,SaveOutlined, UploadOutlined } from '@mui/icons-material'; // prettier-ignore
-import { dbProducts } from 'database';
-import { Box,Button,Card,CardActions,CardMedia,Checkbox,Chip,Divider,FormControl,
+import { useSnackbar } from 'notistack';
+import { DriveFileRenameOutline,SaveOutlined } from '@mui/icons-material'; // prettier-ignore
+import { Box,Button,Checkbox,Chip,Divider,FormControl,
   FormControlLabel,FormGroup,FormLabel,Grid,Radio,RadioGroup,TextField } from '@mui/material'; // prettier-ignore
 import { useForm } from 'react-hook-form';
+
+import { AdminLayout } from 'ui';
+import { IProduct } from 'types';
+import { dbProducts } from 'database';
 import { adminProductResolver } from 'utils/schemas';
-import { useSnackbar } from 'notistack';
 import { noctiApi } from 'api';
+import { ImagesUploader, TagsField } from 'features/admin';
 
 const validTypes = ['shirts', 'pants', 'hoodies', 'hats'];
 const validGender = ['men', 'women', 'kid', 'unisex'];
@@ -33,10 +35,8 @@ type Props = {
   product: IProduct;
 };
 
-const ProductAdminPage: FC<Props> = ({ product }) => {
-  const [newTagValue, setNewTagValue] = useState('');
+const ProductAdminPage: NextPage<Props> = ({ product }) => {
   const [isSaving, setIsSaving] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
 
@@ -75,56 +75,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     }
 
     setValue('sizes', [...currentSizes, size], { shouldValidate: true });
-  };
-
-  const handleAddTag = () => {
-    const newTag = newTagValue.trim().toLocaleLowerCase();
-    setNewTagValue('');
-    const currentTags = getValues('tags');
-
-    if (currentTags.includes(newTag)) {
-      return;
-    }
-
-    currentTags.push(newTag);
-  };
-
-  const handleRemoveTag = (tag: string) => {
-    const updatedTags = getValues('tags').filter(t => t !== tag);
-    setValue('tags', updatedTags, { shouldValidate: true });
-  };
-
-  const handleFilesSelected = async ({
-    target,
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    if (!target.files || target.files.length === 0) {
-      return;
-    }
-
-    try {
-      // console.log( file );
-      for (const file of target.files) {
-        const formData = new FormData();
-        formData.append('file', file);
-        const { data } = await noctiApi.post<{ message: string }>(
-          '/admin/upload',
-          formData,
-        );
-        setValue('images', [...getValues('images'), data.message], {
-          shouldValidate: true,
-        });
-      }
-    } catch (error) {
-      console.log({ error });
-    }
-  };
-
-  const handleDeleteImage = (image: string) => {
-    setValue(
-      'images',
-      getValues('images').filter(img => img !== image),
-      { shouldValidate: true },
-    );
   };
 
   const onSubmit = async (form: FormData) => {
@@ -168,9 +118,9 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           </Button>
         </Box>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
           {/* Data */}
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6} md={4}>
             <TextField
               label="Título"
               fullWidth
@@ -189,7 +139,25 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               error={!!errors.description}
               helperText={errors.description?.message}
             />
+            <Divider sx={{ my: 2 }} />
 
+            <TextField
+              label="Slug - URL"
+              fullWidth
+              sx={{ mb: 1 }}
+              {...register('slug')}
+              error={!!errors.slug}
+              helperText={errors.slug?.message}
+            />
+
+            <TagsField
+              tags={getValues('tags')}
+              updateTags={updatedTags =>
+                setValue('tags', updatedTags, { shouldValidate: true })
+              }
+            />
+
+            <Divider sx={{ my: 2 }} />
             <TextField
               label="Inventario"
               type="number"
@@ -209,9 +177,10 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               error={!!errors.price}
               helperText={errors.price?.message}
             />
+          </Grid>
 
-            <Divider sx={{ my: 1 }} />
-
+          {/* GENDER, SIZE AND TYPE */}
+          <Grid item xs={12} sm={6} md={4}>
             <FormControl sx={{ mb: 1 }}>
               <FormLabel>Tipo</FormLabel>
               <RadioGroup
@@ -257,7 +226,12 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               {validSizes.map(size => (
                 <FormControlLabel
                   key={size}
-                  control={<Checkbox checked={getValues('sizes').includes(size)} />}
+                  control={
+                    <Checkbox
+                      sx={{ py: 0.5 }}
+                      checked={getValues('sizes').includes(size)}
+                    />
+                  }
                   label={size}
                   onChange={() => handleSizeChange(size)}
                 />
@@ -265,104 +239,16 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             </FormGroup>
           </Grid>
 
-          {/* Tags e imagenes */}
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Slug - URL"
-              fullWidth
-              sx={{ mb: 1 }}
-              {...register('slug')}
-              error={!!errors.slug}
-              helperText={errors.slug?.message}
+          {/* IMAGES */}
+          <Grid item xs={12} sm={6} md={4}>
+            <ImagesUploader
+              images={getValues('images')}
+              updateImages={imgs =>
+                setValue('images', imgs, {
+                  shouldValidate: true,
+                })
+              }
             />
-
-            <TextField
-              label="Etiquetas"
-              fullWidth
-              sx={{ mb: 1 }}
-              helperText="Presiona [SPACE] para agregar"
-              value={newTagValue}
-              onChange={({ target }) => setNewTagValue(target.value)}
-              onKeyUp={({ code }) => (code === 'Space' ? handleAddTag() : undefined)}
-            />
-
-            <Box
-              sx={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                listStyle: 'none',
-                p: 0,
-                m: 0,
-              }}
-              component="ul"
-            >
-              {getValues('tags').map(tag => {
-                return (
-                  <Chip
-                    key={tag}
-                    label={tag}
-                    onDelete={() => handleRemoveTag(tag)}
-                    color="primary"
-                    size="small"
-                    sx={{ ml: 1, mt: 1 }}
-                  />
-                );
-              })}
-            </Box>
-
-            <Divider sx={{ my: 2 }} />
-
-            <Box display="flex" flexDirection="column">
-              <FormLabel sx={{ mb: 1 }}>Imágenes</FormLabel>
-              <Button
-                color="secondary"
-                fullWidth
-                startIcon={<UploadOutlined />}
-                sx={{ mb: 3 }}
-                onClick={() => fileInputRef.current?.click()}
-              >
-                Cargar imagen
-              </Button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                multiple
-                accept="image/png, image/gif, image/jpeg"
-                style={{ display: 'none' }}
-                onChange={handleFilesSelected}
-              />
-
-              <Chip
-                label="Mínimo dos imágenes"
-                color="error"
-                variant="outlined"
-                sx={{ display: getValues('images').length < 2 ? 'flex' : 'none' }}
-              />
-
-              <Grid container spacing={2}>
-                {getValues('images').map(img => (
-                  <Grid item xs={4} sm={3} key={img}>
-                    <Card>
-                      <CardMedia
-                        component="img"
-                        className="fadeIn"
-                        image={img}
-                        alt={img}
-                      />
-                      <CardActions>
-                        <Button
-                          fullWidth
-                          color="error"
-                          onClick={() => handleDeleteImage(img)}
-                        >
-                          Eliminar
-                        </Button>
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
           </Grid>
         </Grid>
       </form>
@@ -378,7 +264,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (slug === 'new') {
     product = {
       description: '',
-      images: ['img1', 'img2'],
+      images: [],
       inStock: 0,
       price: 0,
       sizes: [],
