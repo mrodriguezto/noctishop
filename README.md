@@ -1,34 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Noctishop
 
-## Getting Started
+Noctishop is an almost fully featured e-commerce website that supports authentication, payments via paypal, products, users and orders management through a dedicated UI for admins.
 
-First, run the development server:
+Made with Next-js, MUI and MongoDB. It also uses Cloudinary for storing product images, Github OAuth for authentication and Paypal.
 
-```bash
+## Prerequisites
+
+- Node.js >= 16.0 installed
+- MongoDB cluster
+- Cloudinary account
+- Paypal app (must have the client_id and secret_id)
+- Dedicated Github OAuth app
+
+## Running locally
+
+### Setting up the environment
+
+Rename the `env.example` to `.env` and assign each variable to your corresponding keys.
+
+The default values for certain variables are already assigned (tax and host), give them a new value just when necessary.
+
+### Install all the packages
+
+```
+npm install
+```
+
+or (if you're using yarn):
+
+```
+yarn
+```
+
+### Start the server
+
+```
 npm run dev
-# or
+```
+
+or (if you're using yarn):
+
+```
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+It should start running on localhost:3000 🤓
