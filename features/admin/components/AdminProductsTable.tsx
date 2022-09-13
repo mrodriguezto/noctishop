@@ -1,6 +1,6 @@
 import NextLink from 'next/link';
 import { CardMedia, Link } from '@mui/material';
-import { DataGrid, GridColumns, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColumns, GridRenderCellParams } from '@mui/x-data-grid';
 import useSWR from 'swr';
 import { IProduct } from 'types';
 import { FullScreenLoading } from 'ui';
@@ -9,24 +9,22 @@ const columns: GridColumns = [
   {
     field: 'img',
     headerName: 'Foto',
-    renderCell: ({ row }: GridValueGetterParams) => {
-      return (
-        <a href={`/product/${row.slug}`} target="_blank" rel="noreferrer">
-          <CardMedia
-            component="img"
-            alt={row.title}
-            className="fadeIn"
-            image={row.img}
-          />
-        </a>
-      );
-    },
+    renderCell: ({ row }: GridRenderCellParams) => (
+      <a href={`/product/${row.slug}`} target="_blank" rel="noreferrer">
+        <CardMedia
+          component="img"
+          alt={row.title}
+          className="fadeIn"
+          image={row.img}
+        />
+      </a>
+    ),
   },
   {
     field: 'title',
     headerName: 'Title',
     width: 250,
-    renderCell: ({ row }: GridValueGetterParams) => {
+    renderCell: ({ row }: GridRenderCellParams) => {
       return (
         <NextLink href={`/admin/products/${row.slug}`} passHref>
           <Link underline="always">{row.title}</Link>

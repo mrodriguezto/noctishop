@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import useSWR from 'swr';
 
-import { DataGrid, GridColumns, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColumns, GridRenderCellParams } from '@mui/x-data-grid';
 import { Select, MenuItem } from '@mui/material';
 import { useSnackbar } from 'notistack';
 
@@ -49,7 +49,7 @@ const UsersTable = () => {
       field: 'role',
       headerName: 'Rol',
 
-      renderCell: ({ row }: GridValueGetterParams) => {
+      renderCell: ({ row }: GridRenderCellParams) => {
         return (
           <Select
             value={row.role}

@@ -1,5 +1,5 @@
 import { Chip } from '@mui/material';
-import { DataGrid, GridColumns, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColumns, GridRenderCellParams } from '@mui/x-data-grid';
 import useSWR from 'swr';
 import { IOrder, IUser } from 'types';
 import { FullScreenLoading } from 'ui';
@@ -12,7 +12,7 @@ const columns: GridColumns = [
   {
     field: 'isPaid',
     headerName: 'Pagada',
-    renderCell: ({ row }: GridValueGetterParams) => {
+    renderCell: ({ row }: GridRenderCellParams) => {
       return row.isPaid ? (
         <Chip variant="outlined" label="Pagada" color="success" />
       ) : (
@@ -24,7 +24,7 @@ const columns: GridColumns = [
   {
     field: 'check',
     headerName: 'Ver orden',
-    renderCell: ({ row }: GridValueGetterParams) => {
+    renderCell: ({ row }: GridRenderCellParams) => {
       return (
         <a href={`/admin/orders/${row.id}`} target="_blank" rel="noreferrer">
           Ver orden

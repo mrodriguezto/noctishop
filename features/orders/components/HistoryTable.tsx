@@ -1,5 +1,5 @@
 import { Chip, Link } from '@mui/material';
-import { DataGrid, GridColumns, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColumns, GridRenderCellParams } from '@mui/x-data-grid';
 import NextLink from 'next/link';
 import { IOrder } from 'types';
 
@@ -11,7 +11,7 @@ const columns: GridColumns = [
     headerName: 'Pagada',
     description: 'Muestra información si está pagada o no',
     width: 120,
-    renderCell: (params: GridValueGetterParams) => {
+    renderCell: (params: GridRenderCellParams) => {
       return params.row.paid ? (
         <Chip color="success" label="Pagada" variant="outlined" />
       ) : (
@@ -25,7 +25,7 @@ const columns: GridColumns = [
     description: 'Muestra información si está pagada o no',
     width: 120,
     sortable: false,
-    renderCell: (params: GridValueGetterParams) => {
+    renderCell: (params: GridRenderCellParams) => {
       return (
         <NextLink href={`/orders/${params.row.orderId}`} passHref>
           <Link underline="always">Ver orden</Link>
