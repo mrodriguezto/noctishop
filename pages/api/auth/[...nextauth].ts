@@ -31,10 +31,6 @@ export default NextAuth({
     }),
   ],
 
-  // jwt: {
-  //   maxAge: 60 * 60 * 24 * 30, // 30d
-  // },
-
   pages: {
     signIn: '/auth/login',
     newUser: '/auth/register',
@@ -64,14 +60,12 @@ export default NextAuth({
         }
       }
 
-      // console.log({ token, account, user });
       return token;
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken;
       session.user = token.user as any;
 
-      // console.log({ session, token, user });
       return session;
     },
   },

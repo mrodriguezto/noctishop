@@ -32,17 +32,17 @@ async function registerUser(req: NextApiRequest, res: NextApiResponse<Data>) {
 
   if (name.length < 2)
     return res.status(400).json({
-      message: 'Name must be at least 2 characters long',
+      message: 'El nombre debe tener un mínimo de dos caracteres',
     });
 
   if (password.length < 8)
     return res.status(400).json({
-      message: 'Password must be at least 8 characters long',
+      message: 'La contrasela debe tener un mínimo de 8 caracteres',
     });
 
   if (!validations.isValidEmail(email))
     return res.status(400).json({
-      message: 'Email has an invalid format',
+      message: 'El email tiene un formato inválido',
     });
 
   // Validate existing user
@@ -55,7 +55,7 @@ async function registerUser(req: NextApiRequest, res: NextApiResponse<Data>) {
     await db.disconnect();
     return res
       .status(400)
-      .json({ message: 'This email already has an associated account' });
+      .json({ message: 'Email ingresado ya tiene una cuenta asociada' });
   }
 
   // Create new user
@@ -73,7 +73,7 @@ async function registerUser(req: NextApiRequest, res: NextApiResponse<Data>) {
     console.log(error);
 
     return res.status(500).json({
-      message: 'Something went wrong',
+      message: 'Ocurrió un error al almacenar la información. Intente de nuevo',
     });
   }
 

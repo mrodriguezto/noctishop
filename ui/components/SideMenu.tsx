@@ -77,13 +77,6 @@ const SideMenu = () => {
 
           {user && (
             <>
-              <ListItem button>
-                <ListItemIcon>
-                  <AccountCircleOutlined />
-                </ListItemIcon>
-                <ListItemText primary={'Perfil'} />
-              </ListItem>
-
               <ListItem button onClick={() => navigateTo('/orders/history')}>
                 <ListItemIcon>
                   <ConfirmationNumberOutlined />

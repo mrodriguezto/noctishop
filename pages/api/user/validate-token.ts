@@ -26,7 +26,7 @@ async function checkJwt(req: NextApiRequest, res: NextApiResponse<Data>) {
     userId = await jwt.isValidToken(token);
   } catch (error) {
     return res.status(401).json({
-      message: 'Invalid authorization token',
+      message: 'Token de autorización inválido',
     });
   }
 
@@ -37,9 +37,7 @@ async function checkJwt(req: NextApiRequest, res: NextApiResponse<Data>) {
   await db.disconnect();
 
   if (!user)
-    return res
-      .status(400)
-      .json({ message: "A user with the given id doesn't exist" });
+    return res.status(400).json({ message: 'No existe un usuario para este id' });
 
   const { email, _id, role, name } = user;
 

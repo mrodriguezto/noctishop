@@ -22,7 +22,7 @@ async function searchProducts(req: NextApiRequest, res: NextApiResponse<Data>) {
 
   if (!term.length)
     return res.status(400).json({
-      message: 'Bad Request: Search term not specified',
+      message: 'Bad Request: Término de búsqueda no especificado',
     });
 
   term = term.toString().trim().toLowerCase();

@@ -28,26 +28,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [status, data]);
 
-  // useEffect(() => {
-
-  //   checkToken();
-  // }, []);
-
-  // const checkToken = async () => {
-  //   if (!Cookies.get('token')) return;
-
-  //   try {
-  //     const {
-  //       data: { user, token },
-  //     } = await noctiApi.post('/user/validate-token');
-
-  //     dispatch({ type: 'login', payload: user });
-  //     Cookies.set('token', token);
-  //   } catch (error) {
-  //     Cookies.remove('token');
-  //   }
-  // };
-
   const loginUser = async (email: string, password: string) => {
     try {
       const { data } = await noctiApi.post('/user/login', { email, password });
@@ -111,10 +91,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     Cookies.remove('phone');
 
     signOut();
-
-    // dispatch({ type: 'logout' });
-    // router.reload();
-    // Cookies.remove('token');
   };
 
   return (

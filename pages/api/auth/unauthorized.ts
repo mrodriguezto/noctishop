@@ -6,5 +6,5 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseBody>,
 ) {
-  res.status(401).json({ message: 'Not authenticated.' });
+  res.status(401).json({ message: 'No autenticado' });
 }

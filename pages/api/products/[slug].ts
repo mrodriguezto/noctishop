@@ -28,7 +28,7 @@ async function getProductsBySlug(req: NextApiRequest, res: NextApiResponse<Data>
 
   if (!product) {
     return res.status(404).json({
-      message: 'Product not found',
+      message: 'Producto no encontrado',
     });
   }
 

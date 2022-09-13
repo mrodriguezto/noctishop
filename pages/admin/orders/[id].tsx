@@ -86,8 +86,6 @@ const OrderPage: NextPage<Props> = ({ order }) => {
               <OrderSummary order={order} />
 
               <Box sx={{ mt: 3 }} display="flex" flexDirection="column">
-                {/* TODO */}
-
                 <Box display="flex" flexDirection="column">
                   {order.isPaid ? (
                     <Chip

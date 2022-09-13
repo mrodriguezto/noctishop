@@ -21,7 +21,6 @@ import {
 } from '@mui/icons-material';
 import { UIContext } from 'ui';
 import { CartContext } from 'features/cart';
-import { AuthContext } from 'features/auth';
 
 const categories = [
   { title: 'Hombres', path: 'men' },
@@ -33,7 +32,6 @@ const Navbar = () => {
   const { route, push } = useRouter();
 
   const { toggleSideMenu } = useContext(UIContext);
-  const { isLoggedIn } = useContext(AuthContext);
   const {
     order: { numberOfItems },
   } = useContext(CartContext);
@@ -55,8 +53,7 @@ const Navbar = () => {
       <Toolbar>
         <NextLink href="/" passHref>
           <Link display="flex" alignItems="center">
-            <Typography variant="h6">Nocti |</Typography>
-            <Typography sx={{ ml: 0.5 }}>Shop</Typography>
+            <Typography variant="h6">Noctishop</Typography>
           </Link>
         </NextLink>
 

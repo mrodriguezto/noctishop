@@ -27,10 +27,11 @@ async function loginUser(req: NextApiRequest, res: NextApiResponse<Data>) {
 
   await db.disconnect();
 
-  if (!user) return res.status(400).json({ message: 'Credentials are invalid' });
+  if (!user)
+    return res.status(400).json({ message: 'Las credenciales son inválidas' });
 
   if (!bcrypt.compareSync(password, user.password!))
-    return res.status(400).json({ message: 'Credentials are invalid' });
+    return res.status(400).json({ message: 'Las credenciales son inválidas' });
 
   const { role, name, _id } = user;
 

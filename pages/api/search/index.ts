@@ -5,5 +5,5 @@ type Data = {
 };
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-  res.status(404).json({ message: 'Not Found' });
+  res.status(404).json({ message: 'No encontrado' });
 }

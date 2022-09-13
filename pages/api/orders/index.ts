@@ -28,7 +28,7 @@ async function createOrder(req: NextApiRequest, res: NextApiResponse<Data>) {
   const session: any = await getSession({ req });
 
   if (!session) {
-    return res.status(401).json({ message: 'Unauthorized for this operation' });
+    return res.status(401).json({ message: 'Sin autorización' });
   }
 
   // Create an array with the user's products
@@ -45,7 +45,7 @@ async function createOrder(req: NextApiRequest, res: NextApiResponse<Data>) {
       )?.price;
 
       if (!currentPrice) {
-        throw new Error('Product does not exist. Verify items in your cart');
+        throw new Error('El producto no existe. Verifica los items en tu carrito');
       }
 
       return current.quantity * currentPrice + prev;
@@ -56,7 +56,7 @@ async function createOrder(req: NextApiRequest, res: NextApiResponse<Data>) {
 
     if (total !== serverTotal) {
       throw new Error(
-        'The total amount is different from the server. Possible manipulation',
+        'El monto total es diferente en distintas instancias. Posible manipulación',
       );
     }
 
@@ -70,7 +70,9 @@ async function createOrder(req: NextApiRequest, res: NextApiResponse<Data>) {
     return res.status(201).json(newOrder);
   } catch (error: any) {
     console.log(error);
-    res.status(400).json({ message: error.message || 'Check server logs' });
+    res
+      .status(400)
+      .json({ message: error.message || 'Revisar los logs del servidor' });
   } finally {
     await db.disconnect();
   }
