@@ -20,7 +20,7 @@ const CartPage: NextPage = () => {
 
   useEffect(() => {
     if (isLoaded && cart.length === 0) {
-      router.replace('/cart/empty');
+      // router.replace('/cart/empty');
     }
   }, [isLoaded, router, cart]);
 

@@ -149,25 +149,4 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   };
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-//   const { slug } = params as { slug: string };
-
-//   const product = await dbProducts.getProductsBySlug(slug);
-
-//   if (!product) {
-//     return {
-//       redirect: {
-//         destination: '/',
-//         permanent: false,
-//       },
-//     };
-//   }
-
-//   return {
-//     props: {
-//       product,
-//     },
-//   };
-// };
-
 export default ProductPage;

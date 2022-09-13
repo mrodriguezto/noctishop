@@ -38,9 +38,6 @@ const RegisterPage: NextPage = () => {
       return;
     }
 
-    // const destination = router.query.p?.toString() || '/';
-    // router.replace(destination);
-
     await signIn('credentials', { email, password });
   };
 
