@@ -2,7 +2,7 @@
 
 Noctishop is an almost fully featured e-commerce website that supports authentication, payments via paypal, products, users and orders management through a dedicated UI for admins.
 
-Made with Next-js, MUI and MongoDB. It also uses Cloudinary for storing product images, Github OAuth for authentication and Paypal.
+Made with Next.js, MUI and MongoDB. It also uses Cloudinary for storing product images, Github OAuth for authentication and Paypal.
 
 ## Prerequisites
 
